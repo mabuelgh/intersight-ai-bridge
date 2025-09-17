@@ -1,0 +1,10 @@
+# Fichiers et dossiers à ignorer
+*.pyc
+__pycache__/
+.env
+*.log
+*.tmp
+.DS_Store
+node_modules/
+venv/
+test.cmd

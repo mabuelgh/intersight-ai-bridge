@@ -1,0 +1,8 @@
+vllm
+langchain_milvus
+langchain_openai
+langchain_community 
+beautifulsoup4
+langchain-text-splitters
+milvus-lite
+pypdf
