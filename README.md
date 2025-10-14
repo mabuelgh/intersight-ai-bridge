@@ -1,6 +1,6 @@
 # Intersight AI Bridge
 
-**Intersight AI Bridge** simplifies the initial installation and usage of Cisco UCS devices for AI workloads.  
+**Intersight AI Bridge** simplifies the initial installation and usage of Cisco UCS devices for AI workloads such as AI Pods.  
 
 > **Note**: Starting from **Step 3**, these tools can also be used on any Linux system, even without Cisco UCS hardware.
 
@@ -21,32 +21,9 @@ This project provides scripts and configurations to:
 
 
 ### Step 2: Install the Operating System through Intersight OS Install feature
-(Can be skipped if you prefer manual installation or are not using Intersight.)  
+*[Detailed instructions for Step 2](tutorials/README_Step_2.md)*
 
-1. Modify the cfg file to your environement, recommended things to change:
-- Hashed passsword and default username
-- Network interface settings : remove or change VLAN, put DHCP mode or manual IP
-- Change the Proxy address
-- Adjust the timezone
-
-2. Download the recommended ISO
-- [Ubuntu](https://old-releases.ubuntu.com/releases/22.04/)
-- [Cisco CSU](https://software.cisco.com/download/home/286331885/type/283137444/release/6.3(2c))
-
-Recommended ISOs:  
-- `ubuntu-22.04.2-live-server-amd64.iso`  
-- `ucs-scu-6.3.2c.iso`
-
-3. Use the Software Repository of Intersight
-- Open Intersight
-- Go to System > Software Repository
-- Add the OS Image Link of the downloaded Ubuntu (you can put the image on any NFS, CIFS or HTTP like EasyUCS or IMM Transition Tool)
-- Add the SCU Link of the downloaded SCU (you can put the image on any NFS, CIFS or HTTP like EasyUCS or IMM Transition Tool)
-- Upload the OS Configuration file (the cfg file modified in step 1)
-- Go to the target server, go to Action, select "Install Operating System"
-- Select the OS, select "Custom" configuration, select the cfg file, select the SCU, select the installation target "M.2 MStorBootVd" and Install
-
-**Note**: This process will take some time.
+(Can be skipped if you prefer manual installation or are not using Intersight.)
 
 ### Step 3: Requirements Installation & Setup
 
@@ -58,6 +35,8 @@ Recommended ISOs:
    ./setup.sh
    ```
    **Note**: This action will conclude with a reboot.
+   
+   The setup script will automatically add a Portainer container at *http://ipserver:9000* (this is optionnal and can be removed).
 
 2. Verify installation:
    ```bash
@@ -90,16 +69,19 @@ Launch VLLM with RAG for file-based context:
 ```bash
 ./scenario3.sh
 ```
-#### 📖 Example Questions to ask based on the RAG files in the project
+**Note**: This project comes with sample files about fictives company descriptions.
+
+#### 📖 Sample of questions to ask based on the RAG files in the project
 Once running, you can ask questions such as:
 - *"When was Chronos Innovations created?"*  
 - *"What's the business of Nimbus Orchard?"*  
 - *"What is LuminaTech Solutions?"*  
 
 ## Notes
-- Monitor GPUs with commands: "nvidia-smi" & "nvtop"
-- Steps 1 and 2 are optional if you’re not using Cisco Intersight.  
-- Scripts are modular—feel free to adapt them for your environment.  
+- Monitor GPUs with commands: "**nvidia-smi**" & "**nvtop**"
+- Steps 1 and 2 are optional if you’re not using Cisco Intersight  
+- Scripts are modular, feel free to adapt them for your environment
+- Tested with ubuntu-22.04.2-live-server on Cisco UCSX-210C-M7 with NVIDIA L40S GPU
 
 ## Features and improvements to come
 - Complete Step 1 Instructions
