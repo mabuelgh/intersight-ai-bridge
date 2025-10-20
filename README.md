@@ -15,9 +15,10 @@ This project provides scripts and configurations to:
 
 ## Getting Started
 
-### Step 1: Deploy the Server Profile
-*Detailed instructions for deploying a Server Profile with a JSON provided config file on Cisco Intersight will be added here soon.*  
-(Can be skipped if you prefer manual configuration or are not using Intersight.)
+### Step 1: Deploy the Server Profile on Intersight
+*[Detailed instructions for Step 1](tutorials/README_Step_1.md)*
+
+(Can be skipped if you prefer manual installation or are not using Intersight.)
 
 
 ### Step 2: Install the Operating System through Intersight OS Install feature
@@ -84,7 +85,6 @@ Once running, you can ask questions such as:
 - Tested with ubuntu-22.04.2-live-server on Cisco UCSX-210C-M7 with NVIDIA L40S GPU
 
 ## Features and improvements to come
-- Complete Step 1 Instructions
 - Put scenario 3 python utilisation inside a container instead of on the OS directly
 - Create a scenario 4 to showcase GPU activity
 

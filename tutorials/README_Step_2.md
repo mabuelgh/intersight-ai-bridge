@@ -14,7 +14,7 @@
 - [Cisco CSU](https://software.cisco.com/download/home/286331885/type/283137444/release/6.3(2c))
 
 Recommended ISOs:  
-- `ubuntu-22.04.2-live-server-amd64.iso`  
+- `ubuntu-22.04.2-live-server-amd64.iso`
 - `ucs-scu-6.3.2c.iso`
 
 ### 3. Use the Software Repository of Intersight
