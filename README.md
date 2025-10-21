@@ -1,16 +1,17 @@
 # Intersight AI Bridge
 
-**Intersight AI Bridge** simplifies the initial installation and usage of Cisco UCS devices for AI workloads such as AI Pods.  
+Intersight AI Bridge **simplifies and accelerates** the initial installation and usage of **AI workloads** such as Cisco AI Pods.
 
 > **Note**: Starting from **Step 3**, these tools can also be used on any Linux system, even without Cisco UCS hardware.
 
 This project provides scripts and configurations to:  
 1. Deploy a **Server Profile** on Cisco Intersight.  
 2. Install an **Operating System** through the Intersight OS Install feature (requires an *Advantage* license, otherwise can be done manually).  
-3. Set up your environment for GPU-based AI workloads with three possible use cases:  
+3. **Set up your environment for GPU-based AI workloads** with four possible use cases:  
    - **Chatbot with VLLM + OpenWebUI**  
    - **Chatbot with Text Generation WebUI**  
-   - **Chatbot with VLLM + Retrieval-Augmented Generation (RAG)**  
+   - **Chatbot with VLLM + Retrieval-Augmented Generation (RAG)**
+   - **Stresstest with VLLM**
 
 
 ## Getting Started
@@ -66,17 +67,27 @@ Launch with the Text Generation WebUI project:
 
 
 ### 3. Chatbot: VLLM + RAG (File Context)
-Launch VLLM with RAG for file-based context:  
+Launch VLLMs with RAG for file-based context:  
 ```bash
 ./scenario3.sh
 ```
-**Note**: This project comes with sample files about fictives company descriptions.
+**Note**: This project comes with sample files about fictives company descriptions.<br>
+Another file *docker-compose-vllm-RAG-dual-GPU.yml* can be used instead of *docker-compose-vllm-RAG.yml* for dual GPU infra.
 
 #### 📖 Sample of questions to ask based on the RAG files in the project
 Once running, you can ask questions such as:
 - *"When was Chronos Innovations created?"*  
 - *"What's the business of Nimbus Orchard?"*  
-- *"What is LuminaTech Solutions?"*  
+- *"What is LuminaTech Solutions?"*
+
+
+### 4. Showcase regular GPU usage (Stresstest): VLLM
+Launch VLLMs with curl containers:
+```bash
+./scenario4.sh
+```
+**Note**: This scenario was made for dual GPU infra, remove the "gpu2" containers in *docker-compose-vllm-stresstest.yml* if necessary.
+
 
 ## Notes
 - Monitor GPUs with commands: "**nvidia-smi**" & "**nvtop**"
@@ -86,9 +97,8 @@ Once running, you can ask questions such as:
 
 ## Features and improvements to come
 - Put scenario 3 python utilisation inside a container instead of on the OS directly
-- Create a scenario 4 to showcase GPU activity
 
 ## Authors
 
-* **Adrien Lécharny** - *Creator* - [GitHub account link](https://github.com/alecharn)
-* **Marc Abu El Ghait** - *Initial work* - [GitHub account link](https://github.com/mabuelgh)
+* **Adrien Lécharny** - [GitHub account link](https://github.com/alecharn)
+* **Marc Abu El Ghait** - [GitHub account link](https://github.com/mabuelgh)

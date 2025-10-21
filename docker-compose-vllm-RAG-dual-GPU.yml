@@ -1,0 +1,53 @@
+# mabuelgh - Oct 2025
+
+name: vllm-and-open-webui
+services:
+  vllm:
+    image: vllm/vllm-openai:latest
+    container_name: vllm
+    command: --model /app/model/
+    volumes:
+      - ./models/Phi-4-mini-instruct:/app/model
+    ports:
+      - "8000:8000"
+    restart: always
+    ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0'] # Assigns the first GPU (index 0)
+              capabilities: [gpu]
+
+  vllm-embedded-llm:
+    image: vllm/vllm-openai:latest
+    container_name: vllm-embedded-llm
+    command: --model /app/model/rag
+    volumes:
+      - ./models/Qwen3-Embedding-0.6B:/app/model/rag
+    ports:
+      - "8001:8000"
+    restart: always
+    ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['1'] # Assigns the second GPU (index 1)
+              capabilities: [gpu]
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui-for-vllm
+    volumes:
+    - ./open-webui:/app/backend/data
+    ports:
+      - "3000:8080"
+    environment:
+      - OPENAI_API_BASE_URL=http://vllm:8000/v1
+      - OFFLINE_MODE=true
+      - OPENAI_API_KEY=none
+      - WEBUI_AUTH=false
+    restart: always

@@ -1,0 +1,80 @@
+# mabuelgh - Oct 2025
+
+services:
+  # vLLM instance on GPU 1
+  vllm-gpu1:
+    image: vllm/vllm-openai:latest
+    container_name: vllm-gpu1
+    command: --model /app/model/phi4 --port 8000
+    volumes:
+      - ./models/Phi-4-mini-instruct:/app/model/phi4
+    ports:
+      - "8000:8000"
+    restart: always
+    ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0'] # Assigns the first GPU (index 0)
+              capabilities: [gpu]
+
+  # vLLM instance on GPU 2
+  vllm-gpu2:
+    image: vllm/vllm-openai:latest
+    container_name: vllm-gpu2
+    command: --model /app/model/phi4 --port 8001
+    volumes:
+      - ./models/Phi-4-mini-instruct:/app/model/phi4
+    ports:
+      - "8001:8001" # Expose on a different port
+    restart: always
+    ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['1'] # Assigns the second GPU (index 1)
+              capabilities: [gpu]
+
+  # Client that regularly queries vllm-gpu1 for completions
+  vllm-client-gpu-1:
+    image: curlimages/curl:latest # A lightweight image with curl
+    container_name: vllm-client-gpu-1
+    command: |
+      /bin/sh -c "
+        echo 'Waiting for vllm-gpu1 to be ready...';
+        while ! curl -s http://vllm-gpu1:8000/v1/health; do sleep 5; done;
+        echo 'vllm-gpu1 is ready. Starting query loop...';
+        while true; do
+          echo 'Sending completion request to vllm-gpu1 ...';
+          curl -X POST http://vllm-gpu1:8000/v1/completions -H 'Content-Type: application/json' -d '{\"model\": \"/app/model/phi4\", \"prompt\": \"Tell me a short story about a brave knight and a dragon.\", \"max_tokens\": 150, \"temperature\": 0.7}';
+          echo ''; # Newline for readability
+          sleep 10; # Query every 10 seconds
+        done
+      "
+    depends_on:
+      - vllm-gpu1
+    restart: on-failure
+
+  # Client that regularly queries vllm-gpu2 for completions
+  vllm-client-gpu-2:
+    image: curlimages/curl:latest
+    container_name: vllm-client-gpu-2
+    command: |
+      /bin/sh -c "
+        echo 'Waiting for vllm-gpu2 to be ready...';
+        while ! curl -s http://vllm-gpu2:8001/v1/health; do sleep 5; done;
+        echo 'vllm-gpu2 is ready. Starting query loop...';
+        while true; do
+          echo 'Sending embedding request to vllm-gpu2 ...';
+          curl -X POST http://vllm-gpu2:8001/v1/completions -H 'Content-Type: application/json' -d '{\"model\": \"/app/model/phi4\", \"prompt\": \"Tell me a short story about a snowy season.\", \"max_tokens\": 150, \"temperature\": 0.7}';
+          echo ''; # Newline for readability
+          sleep 15; # Query every 15 seconds
+        done
+      "
+    depends_on:
+      - vllm-gpu2
+    restart: on-failure
