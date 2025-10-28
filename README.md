@@ -29,7 +29,9 @@ This project provides scripts and configurations to:
 
 ### Step 3: Requirements Installation & Setup
 
-1. Clone the repository (make sure to export the proxy if needed) and run the setup script:
+1. Clone the repository (make sure to export the proxy if needed), and modify the variable PROXY_URL in setup.sh file.
+
+Then run the setup script:
    ```bash
    git clone https://github.com/mabuelgh/intersight-ai-bridge
    cd intersight-ai-bridge
