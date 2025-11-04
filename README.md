@@ -29,16 +29,13 @@ This project provides scripts and configurations to:
 
 ### Step 3: Requirements Installation & Setup
 
-1. Clone this repository, then modify the variable PROXY_URL in **setup.sh** file. To clone this repository, you might have to first configure a Proxy.
-
-2. Run the setup script:
-      ```bash
-      git clone https://github.com/mabuelgh/intersight-ai-bridge
-      cd intersight-ai-bridge
-      chmod +x *.sh
-      ./setup.sh
-      ```
-   
+1. Clone the repository (make sure to export the proxy if needed) and run the setup script:
+   ```bash
+   git clone https://github.com/mabuelgh/intersight-ai-bridge
+   cd intersight-ai-bridge
+   chmod +x *.sh
+   ./setup.sh
+   ```
    **Note**: This action will conclude with a reboot.
    
    The setup script will automatically add a Portainer container at *http://ipserver:9000* (this is optionnal and can be removed).
@@ -77,7 +74,7 @@ Launch VLLMs with RAG for file-based context:
 ./scenario3.sh
 ```
 **Note**: This project comes with sample files about fictives company descriptions.<br>
-Another file *docker-compose-vllm-RAG-dual-GPU.yml* can be used instead of *docker-compose-vllm-RAG.yml* for dual GPU infra.
+For dual GPU infra, another file *docker-compose-vllm-RAG-dual-GPU.yml* can be used instead of *docker-compose-vllm-RAG.yml*.
 
 #### 📖 Sample of questions to ask based on the RAG files in the project
 Once running, you can ask questions such as:
