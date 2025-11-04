@@ -29,16 +29,15 @@ This project provides scripts and configurations to:
 
 ### Step 3: Requirements Installation & Setup
 
-1. Clone the repository (make sure to export the proxy if needed) and run the setup script:
-   ```bash
-   git clone https://github.com/mabuelgh/intersight-ai-bridge
-   cd intersight-ai-bridge
-   chmod +x *.sh
-   ./setup.sh
-   ```
-   **Note**: This action will conclude with a reboot.
-   
-   The setup script will automatically add a Portainer container at *http://ipserver:9000* (this is optionnal and can be removed).
+1. Clone this repository, then modify the variable PROXY_URL in **setup.sh** file. To clone this repository, you might have to first configure a Proxy.
+
+2. Run the setup script:
+      ```bash
+      git clone https://github.com/mabuelgh/intersight-ai-bridge
+      cd intersight-ai-bridge
+      chmod +x *.sh
+      ./setup.sh
+      ```
 
 3. Verify installation:
 
