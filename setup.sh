@@ -36,10 +36,13 @@ NO_PROXY=localhost,127.0.0.1,171.*,172.*,192.*,10.*,1.*" | sudo tee -a /etc/envi
 # Part 2: Update the package list
 print_section_header "Updating the package list"
 sudo apt-get update
-# sudo apt upgrade -y
+sudo apt upgrade -y
 
 # Part 3: Docker Installation
 print_section_header "Installing Docker"
+
+print_section_header "Removing old Docker versions if any"
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
 print_subsection_header "Adding Docker's official GPG key"
 sudo apt-get install ca-certificates curl
@@ -48,11 +51,14 @@ sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyring
 sudo chmod a+r /etc/apt/keyrings/docker.asc
 
 print_subsection_header "Adding the Docker repository to Apt sources and updating the package list"
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 
 print_subsection_header "Installing Docker packages"
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 print_subsection_header "Appending Cisco proxy settings to Docker service configuration"
 sudo mkdir -p /etc/systemd/system/docker.service.d
@@ -63,6 +69,9 @@ Environment=\"http_proxy=$PROXY_URL\"
 Environment=\"https_proxy=$PROXY_URL\"
 Environment=\"NO_PROXY=localhost,127.0.0.1,*.cisco.com,171.*,172.*,192.*,10.*,1.*\"" | sudo tee -a /etc/systemd/system/docker.service.d/http-proxy.conf
 
+# The Docker service should start automatically after installation
+
+# Restart the Docker service to apply the proxy settings
 print_subsection_header "Reloading the Docker daemon"
 sudo systemctl daemon-reload
 sudo systemctl restart docker
@@ -75,9 +84,13 @@ print_section_header "Access the Portainer web interface at http://localhost:900
 # Part 4: Install Nvidia Drivers
 print_section_header "Installing Nvidia Drivers"
 sudo ubuntu-drivers autoinstall
+sudo apt-get dist-upgrade
 
 # Part 5: Install Nvidia container toolkit
 print_section_header "Installing Nvidia container toolkit"
+
+print_subsection_header "Installing prerequisites"
+sudo apt-get update && sudo apt-get install -y --no-install-recommends curl gnupg2
 
 print_subsection_header "Adding Nvidia's official GPG key"
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
