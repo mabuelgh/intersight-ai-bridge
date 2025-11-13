@@ -90,17 +90,8 @@ print_section_header "Access the Portainer web interface at http://localhost:900
 
 # Part 4: Install Nvidia Drivers
 print_section_header "Installing Nvidia Drivers"
-# sudo ubuntu-drivers autoinstall
-# sudo apt-get dist-upgrade
-# Due to a compatiblity issue right now with supported CUDA in container, we install the drivers manually to stay in CUDA 12.x, 13 is not yet supported in Nvidia container toolkit
-# Remove any existing NVIDIA packages to avoid conflicts
-sudo apt-get purge -y 'nvidia-*'
-sudo apt-get autoremove -y
-# Add NVIDIA's official CUDA repository for Ubuntu 22.04
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
-sudo dpkg -i cuda-keyring_1.1-1_all.deb
-sudo apt-get update
-sudo apt-get install -y nvidia-driver-550
+sudo ubuntu-drivers autoinstall
+sudo apt-get dist-upgrade
 
 # Part 5: Install Nvidia container toolkit
 print_section_header "Installing Nvidia container toolkit"
@@ -129,21 +120,7 @@ sudo systemctl restart docker
 
 print_subsection_header "Configuring Nvidia / Docker runtime in rootless mode"
 sudo nvidia-ctk runtime configure --runtime=docker --config=$HOME/.config/docker/daemon.json
-# With the current version of nvidia-ctk, we need to manually add the default-runtime
-print_section_header "Configuring Docker Daemon to use nvidia as default runtime"
-DAEMON_JSON_PATH="/etc/docker/daemon.json"
-NEW_DAEMON_JSON='{
-    "default-runtime": "nvidia",
-    "runtimes": {
-        "nvidia": {
-            "path": "nvidia-container-runtime",
-            "runtimeArgs": []
-        }
-    }
-}'
-echo "${NEW_DAEMON_JSON}" | sudo tee "${DAEMON_JSON_PATH}" > /dev/null
 sudo systemctl restart docker
-# sudo docker info | grep -i runtime # You should see nvidia as default runtime
 sudo nvidia-ctk config --set nvidia-container-cli.no-cgroups --in-place
 
 # Part 5bis: Install Nvidia CUDA Toolkit

@@ -103,7 +103,7 @@ CUDA 13 is not yet supported in Nvidia container toolkit.
 
 We use **nvidia-driver-550** in the current setup file, you may need to adjust it if your GPU is not compatible.
 
-To prevent any upgrade of the NVIDIA drivers, please use:
+To prevent any upgrade of the Nvidia drivers, please use:
 ```bash
 sudo apt-mark hold nvidia-driver-550 nvidia-kernel-common-550 nvidia-utils-550
 ```

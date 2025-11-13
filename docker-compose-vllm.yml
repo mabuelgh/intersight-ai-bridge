@@ -12,6 +12,9 @@ services:
       - "8000:8000"
     restart: always
     ipc: host
+    environment:
+      - VLLM_USE_FLASHINFER_SAMPLER=0
+    runtime: nvidia
     deploy:
       resources:
         reservations:

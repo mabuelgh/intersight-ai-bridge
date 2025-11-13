@@ -42,6 +42,7 @@ services:
     # Nothing required - comment out the other hardware sections.
 
     ### Nvidia (default) ###
+    runtime: nvidia
     deploy:
         resources:
           reservations:
