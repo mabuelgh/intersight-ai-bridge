@@ -29,7 +29,7 @@ This project provides scripts and configurations to:
 
 ### Step 3: Requirements Installation & Setup
 
-1. Clone this repository, navigato into the project directory and make shell scripts executable. Then, if needed, modify the variable *PROXY_URL* in **setup.sh** file.
+1. Clone this repository, navigate into the project directory and make shell scripts executable. Then, if needed, modify the variable *PROXY_URL* in **setup.sh** file.
    ```bash
    git clone https://github.com/mabuelgh/intersight-ai-bridge
    cd intersight-ai-bridge
