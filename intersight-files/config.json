@@ -588,7 +588,7 @@
                   "allowed_vlans": "541",
                   "enable_q_in_q_tunneling": false,
                   "name": "IAIB-Eth-Net-Group",
-                  "native_vlan": 0,
+                  "native_vlan": 541,
                   "tags": [
                      {
                         "key": "origin",

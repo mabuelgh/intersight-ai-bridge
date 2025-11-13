@@ -52,20 +52,19 @@ This project provides scripts and configurations to:
 
 After setup, choose one of the following scenarios:
 
-### 1. Chatbot: VLLM + OpenWebUI
-Launch VLLM with OpenWebUI:  
+### 1. Chatbot: Text Generation WebUI
+Launch with the Text Generation WebUI project:  
 ```bash
 ./scenario1.sh
 ```
-**Note**: If not done automatically, select your model on the top left corner of OpenWebUI.
+**Note**: You may need to load your model in the settings page before using it.
 
-### 2. Chatbot: Text Generation WebUI
-Launch with the Text Generation WebUI project:  
+### 2. Chatbot: VLLM + OpenWebUI
+Launch VLLM with OpenWebUI:  
 ```bash
 ./scenario2.sh
 ```
-**Note**: You may need to load your model in the settings page before using it.
-
+**Note**: If not done automatically, select your model on the top left corner of OpenWebUI.
 
 ### 3. Chatbot: VLLM + RAG (File Context)
 Launch VLLMs with RAG for file-based context:  
@@ -94,7 +93,7 @@ Launch VLLMs with curl containers:
 - Monitor GPUs with commands: "**nvidia-smi**" & "**nvtop**"
 - Steps 1 and 2 are optional if you’re not using Cisco Intersight  
 - Scripts are modular, feel free to adapt them for your environment
-- Tested with **ubuntu-24.04.3-live-server** on Cisco UCSX-210C-M7 with NVIDIA L40S GPU
+- Tested with **ubuntu-24.04.3-live-server** on Cisco UCSX-210C-M7 with **NVIDIA L40S GPU**
 
 ## Current limitations
 Due to a compatiblity issue right now with supported CUDA in containers, we have to install the drivers manually to **stay in CUDA 12.x.**
