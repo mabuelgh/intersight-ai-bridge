@@ -8,10 +8,10 @@ This project provides scripts and configurations to:
 1. Deploy a **Server Profile** on Cisco Intersight.  
 2. Install an **Operating System** through the Intersight OS Install feature (requires an *Advantage* license, otherwise can be done manually).  
 3. **Set up your environment for GPU-based AI workloads** with four possible use cases:  
-   - **Chatbot with VLLM + OpenWebUI**  
+   - **Chatbot with vLLM + OpenWebUI**  
    - **Chatbot with Text Generation WebUI**  
-   - **Chatbot with VLLM + Retrieval-Augmented Generation (RAG)**
-   - **Stresstest with VLLM**
+   - **Chatbot with vLLM + Retrieval-Augmented Generation (RAG)**
+   - **Stresstest with vLLM**
 
 
 ## Getting Started
@@ -29,24 +29,27 @@ This project provides scripts and configurations to:
 
 ### Step 3: Requirements Installation & Setup
 
-1. Clone this repository, then modify the variable PROXY_URL in **setup.sh** file. To clone this repository, you might have to first configure a Proxy.
+1. Clone this repository, navigate into the project directory and make shell scripts executable. Then, if needed, modify the variable *PROXY_URL* in **setup.sh** file.
+   ```bash
+   git clone https://github.com/mabuelgh/intersight-ai-bridge
+   cd intersight-ai-bridge
+   chmod +x *.sh
+   MY_PROXY="http://proxy.example.com:80" # <--- REPLACE WITH YOUR ACTUAL PROXY
+   sed -i "s|PROXY_URL=\"http://your.new.proxy:80\"|PROXY_URL=\"${MY_PROXY}\"|g" setup.sh
+   ```
 
 2. Run the setup script:
-      ```bash
-      git clone https://github.com/mabuelgh/intersight-ai-bridge
-      cd intersight-ai-bridge
-      chmod +x *.sh
-      ./setup.sh
-      ```
+   ```bash
+   ./setup.sh
+   ```
 
 3. Verify installation:
 
    ```bash
-   cd intersight-ai-bridge
    ./checking.sh
    ```
    
-   This process will trigger the creation of a Docker container. It will then display your CPUs inside the container to confirm the Nvidia container toolkit installation.
+   This process will trigger the creation of a Docker container. It will then display your GPUs inside the container to confirm the Nvidia container toolkit installation.
 
 ## Use Case Scenarios
 
@@ -59,15 +62,15 @@ Launch with the Text Generation WebUI project:
 ```
 **Note**: You may need to load your model in the settings page before using it.
 
-### 2. Chatbot: VLLM + OpenWebUI
-Launch VLLM with OpenWebUI:  
+### 2. Chatbot: vLLM + OpenWebUI
+Launch vLLM with OpenWebUI:  
 ```bash
 ./scenario2.sh
 ```
 **Note**: If not done automatically, select your model on the top left corner of OpenWebUI.
 
-### 3. Chatbot: VLLM + RAG (File Context)
-Launch VLLMs with RAG for file-based context:  
+### 3. Chatbot: vLLM + RAG (File Context)
+Launch vLLMs with RAG for file-based context:  
 ```bash
 ./scenario3.sh
 ```
@@ -81,8 +84,8 @@ Once running, you can ask questions such as:
 - *"What is LuminaTech Solutions?"*
 
 
-### 4. Showcase regular GPU usage (Stresstest): VLLM
-Launch VLLMs with curl containers:
+### 4. Showcase regular GPU usage (Stresstest): vLLM
+Launch vLLMs with curl containers:
 ```bash
 ./scenario4.sh
 ```
