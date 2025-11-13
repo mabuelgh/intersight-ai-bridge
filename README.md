@@ -29,24 +29,25 @@ This project provides scripts and configurations to:
 
 ### Step 3: Requirements Installation & Setup
 
-1. Clone this repository, then modify the variable PROXY_URL in **setup.sh** file. To clone this repository, you might have to first configure a Proxy.
+1. Clone this repository, then modify the variable *PROXY_URL* in **setup.sh** file.
+   ```bash
+   git clone https://github.com/mabuelgh/intersight-ai-bridge
+   cd intersight-ai-bridge
+   chmod +x *.sh
+   ```
 
 2. Run the setup script:
-      ```bash
-      git clone https://github.com/mabuelgh/intersight-ai-bridge
-      cd intersight-ai-bridge
-      chmod +x *.sh
-      ./setup.sh
-      ```
+   ```bash
+   ./setup.sh
+   ```
 
 3. Verify installation:
 
    ```bash
-   cd intersight-ai-bridge
    ./checking.sh
    ```
    
-   This process will trigger the creation of a Docker container. It will then display your CPUs inside the container to confirm the Nvidia container toolkit installation.
+   This process will trigger the creation of a Docker container. It will then display your GPUs inside the container to confirm the Nvidia container toolkit installation.
 
 ## Use Case Scenarios
 

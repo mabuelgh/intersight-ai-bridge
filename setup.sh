@@ -37,7 +37,7 @@ https_proxy=$PROXY_URL
 FTP_PROXY=${PROXY_URL}/
 NO_PROXY=localhost,127.0.0.1,171.*,172.*,192.*,10.*,1.*" | sudo tee -a /etc/environment
 
-# Part 2: Update the package list
+# Part 2: Update and Upgrade the package list
 print_section_header "Updating the package list"
 # Remove the interactive dialog during package upgrades, only valable during this script execution
 export DEBIAN_FRONTEND=noninteractive
@@ -48,7 +48,7 @@ sudo apt upgrade -y
 # Part 3: Docker Installation
 print_section_header "Installing Docker"
 
-print_section_header "Removing old Docker versions if any"
+print_subsection_header "Removing old Docker versions if any"
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
 print_subsection_header "Adding Docker's official GPG key"
@@ -140,10 +140,12 @@ print_subsection_header "Installing nvtop tool to monitor GPU usage"
 sudo apt-get install nvtop
 
 print_subsection_header "Installing huggingface hub"
+# Uncomment the following lines to install huggingface_hub in a virtual environment
 # sudo apt-get install -y python3-venv
 # python3 -m venv ai-bridge
 # source ai-bridge/bin/activate
 # pip install huggingface_hub
+# To install huggingface_hub system-wide, use the following command:
 sudo pip install --break-system-packages huggingface_hub
 
 # Part 7: Reboot host machine
