@@ -5,7 +5,8 @@
 # mabuelgh - Sep 2025
 
 # Variables
-PROXY_URL="http://your.new.proxy:80"
+# Proxy URL (if needed)
+PROXY_URL=""
 
 # Part 0: Functions to create section and subsection headers
 print_section_header() {

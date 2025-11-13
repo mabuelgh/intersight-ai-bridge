@@ -29,21 +29,26 @@ This project provides scripts and configurations to:
 
 ### Step 3: Requirements Installation & Setup
 
-1. Clone this repository, navigate into the project directory and make shell scripts executable. Then, if needed, modify the variable *PROXY_URL* in **setup.sh** file.
+1. Clone this repository, navigate into the project directory and make shell scripts executable:
    ```bash
    git clone https://github.com/mabuelgh/intersight-ai-bridge
    cd intersight-ai-bridge
    chmod +x *.sh
-   MY_PROXY="http://proxy.example.com:80" # <--- REPLACE WITH YOUR ACTUAL PROXY
-   sed -i "s|PROXY_URL=\"http://your.new.proxy:80\"|PROXY_URL=\"${MY_PROXY}\"|g" setup.sh
    ```
 
-2. Run the setup script:
+2. If needed, define the variable *PROXY_URL* in **setup.sh** file, that will be used to configure system proxy & Docker proxy:
+   ```bash
+   sudo nano setup.sh
+
+   PROXY_URL="http://proxy.example.com:80" # <--- REPLACE WITH YOUR ACTUAL PROXY
+   ```
+
+3. Run the setup script:
    ```bash
    ./setup.sh
    ```
 
-3. Verify installation:
+4. Verify installation:
 
    ```bash
    ./checking.sh
