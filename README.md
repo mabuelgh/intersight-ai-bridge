@@ -103,17 +103,6 @@ Launch vLLMs with curl containers:
 - Scripts are modular, feel free to adapt them for your environment
 - Tested with **ubuntu-24.04.3-live-server** on Cisco UCSX-210C-M7 with **NVIDIA L40S GPU**
 
-## Current limitations
-Due to a compatiblity issue right now with supported CUDA in containers, we have to install the drivers manually to **stay in CUDA 12.x.**
-
-CUDA 13 is not yet supported in Nvidia container toolkit. 
-
-We use **nvidia-driver-550** in the current setup file, you may need to adjust it if your GPU is not compatible.
-
-To prevent any upgrade of the Nvidia drivers, please use:
-```bash
-sudo apt-mark hold nvidia-driver-550 nvidia-kernel-common-550 nvidia-utils-550
-```
 
 ## Features and improvements to come
 - Put scenario 3 python utilisation inside a container instead of on the OS directly
