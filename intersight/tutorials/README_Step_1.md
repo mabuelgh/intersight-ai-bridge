@@ -5,15 +5,15 @@
 (This process is using [EasyUCS](https://github.com/vesposito/easyucs))
 
 ### 1. Install EasyUCS to automate Server Profile deployment:
-On a computer that has access to the Intersight account:
-
+- On a computer that has access to the Intersight account:
 ```bash
+cd intersight
 git clone https://github.com/vesposito/easyucs.git
 ```
 
-Install the python dependencies:
+- Install the python dependencies:
 ```bash
-cd easyucs
+pip install -r easyucs/requirements.txt
 pip install -r requirements.txt
 ```
 
@@ -23,21 +23,24 @@ pip install -r requirements.txt
 - Click on **"Generate an API Key"**, put a description related to this project, select "schema version 3" and choose an expiration date
 - Copy the API Key ID on a notepad 
 - Download the Secret Key with the button "Save Secret Key to text file"
+- Put the **SecretKey.txt** file inside the "intersight" folder
 
 **Note**: The key has the same access to Intersight as the user who created it. Please use a user with write-access for this projet.
 
 ### 3. Deploy the JSON config file to Intersight
 
-- Download the *[config.json](/intersight-files/config.json)* file and put it inside */easyucs* folder
-- **Modify the json file** to match your environment:
-  - VLAN: **541 by default**, look for "allowed_vlans" key
-  - Serial Number assigned to the Server Profile: **WZP2708AIA by default**, look for "server_pre_assign_by_serial" key
-  - Management IP: **10.48.54.80 by default**, look for "ipv4_blocks" key
-
-- Put the **SecretKey.txt** file inside the same folder
+- Create a copy of ".env.example" and **modify that copy to match your environment**:
+```bash
+cp .env.example .env
+nano .env
+```
+- Launch the config generation script:
+```bash
+python generate_config.py --json
+```
 - Execute EasyUCS script inside */easyucs* folder : 
-```python
-python easyucs.py config push -i eu-central-1.intersight.com -a "API Key ID" -k ./SecretKey.txt -t intersight -f ./config.json
+```bash
+python easyucs/easyucs.py config push -i eu-central-1.intersight.com -a "API Key ID" -k ./SecretKey.txt -t intersight -f ./config.json
 ```
 **Note**: For SaaS Intersight in the US, use *intersight.com*.<br>
 For SaaS Intersight in the EU, use *eu-central-1.intersight.com*.

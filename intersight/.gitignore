@@ -1,0 +1,26 @@
+# Environment files with sensitive data
+.env
+SecretKey.txt
+
+# Generated configuration files (these are created from templates)
+ubuntu-ai-config.cfg
+config.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs
+*.log
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backup files
+*.backup
+*.bak

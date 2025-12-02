@@ -17,13 +17,13 @@ This project provides scripts and configurations to:
 ## Getting Started
 
 ### Step 1: Deploy the Server Profile on Intersight
-*[Detailed instructions for Step 1](tutorials/README_Step_1.md)*
+*[Detailed instructions for Step 1](intersight/tutorials/README_Step_1.md)*
 
 (Can be skipped if you prefer manual installation or are not using Intersight.)
 
 
 ### Step 2: Install the Operating System through Intersight OS Install feature
-*[Detailed instructions for Step 2](tutorials/README_Step_2.md)*
+*[Detailed instructions for Step 2](intersight/tutorials/README_Step_2.md)*
 
 (Can be skipped if you prefer manual installation or are not using Intersight.)
 
