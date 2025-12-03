@@ -46,7 +46,7 @@ python easyucs/easyucs.py config push -i eu-central-1.intersight.com -a "API Key
 For SaaS Intersight in the EU, use *eu-central-1.intersight.com*.
 
 ### 4. Deploy Server Profile
-*Detailed automated instructions will be added here soon.*
-
-Select the Server Profile's actions, then select **deploy with reboot**.
-
+- Execute the following script to deploy the Server Profile and apply the changes on reboot:
+```bash
+python deploy_server_profile.py
+```

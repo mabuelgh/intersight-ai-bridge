@@ -49,6 +49,7 @@ def generate_json_config(template_path="config.template.json", output_path="conf
     load_dotenv()
     
     env_vars = {
+        'SERVER_PROFILE_NAME': os.getenv('SERVER_PROFILE_NAME'),
         'SERVER_SERIAL': os.getenv('SERVER_SERIAL'),
         'NATIVE_VLAN_ID': os.getenv('NATIVE_VLAN_ID'),
         'ALLOWED_VLANS': os.getenv('ALLOWED_VLANS'),

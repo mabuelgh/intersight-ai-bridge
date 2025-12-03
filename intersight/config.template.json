@@ -835,7 +835,7 @@
                   "imc_access_policy": "IAIB-IMC-Access",
                   "lan_connectivity_policy": "IAIB-IMM-LAN-Conn",
                   "local_user_policy": "IAIB-Admin-Local-User",
-                  "name": "IAIB-AI-IMM-1",
+                  "name": "${SERVER_PROFILE_NAME}",
                   "storage_policy": "IAIB-M2-RAID",
                   "tags": [
                      {
