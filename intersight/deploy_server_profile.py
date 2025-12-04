@@ -45,7 +45,17 @@ MAX_OBJECTS_PER_FETCH_CALL = 100
 def deploy_sp(sp_moid):
     api = server_api.ServerApi(apiClient)
     server_profile = ServerProfile(moid=sp_moid)
-    server_profile.scheduled_actions = [{"Action":"Deploy","ProceedOnReboot":True}]
+    server_profile.scheduled_actions = [{"Action":"Deploy","ProceedOnReboot":False}]
+    try:
+        api_response = api.update_server_profile(moid=sp_moid, server_profile=server_profile)
+        print(api_response)
+    except Exception as e:
+        print(e)
+
+def activate_sp(sp_moid):
+    api = server_api.ServerApi(apiClient)
+    server_profile = ServerProfile(moid=sp_moid)
+    server_profile.scheduled_actions = [{"Action":"Activate","ProceedOnReboot":True}]
     try:
         api_response = api.update_server_profile(moid=sp_moid, server_profile=server_profile)
         print(api_response)
@@ -67,7 +77,10 @@ def fetch_sp_moid(name):
 def main():
     server_profile_name = os.getenv('SERVER_PROFILE_NAME')
     sp_moid = fetch_sp_moid(server_profile_name)
+    if sp_moid is None:
+        return
     deploy_sp(sp_moid)
+    activate_sp(sp_moid)
 
 
 if __name__ == "__main__":

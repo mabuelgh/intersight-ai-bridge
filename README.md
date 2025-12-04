@@ -1,4 +1,4 @@
-# Intersight AI Bridge
+# Intersight AI Bridge [![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/mabuelgh/intersight-ai-bridge)
 
 Intersight AI Bridge **simplifies and accelerates** the initial installation and usage of **AI workloads** such as Cisco AI Pods.
 

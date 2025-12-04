@@ -10,3 +10,5 @@ venv/
 test.cmd
 scenario3_bis.sh
 LabBruAPIv3-SecretKey.txt
+/intersight/easyucs
+intersight/config.json

@@ -5,9 +5,10 @@
 (This process is using [EasyUCS](https://github.com/vesposito/easyucs))
 
 ### 1. Install EasyUCS to automate Server Profile deployment:
-- On a computer that has access to the Intersight account:
+- On a system that has access to the Intersight account:
 ```bash
-cd intersight
+git clone https://github.com/mabuelgh/intersight-ai-bridge
+cd cd intersight-ai-bridge/intersight
 git clone https://github.com/vesposito/easyucs.git
 ```
 

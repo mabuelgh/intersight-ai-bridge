@@ -12,7 +12,11 @@ Recommended ISOs:
 - `ucs-scu-7.1.4.250100.iso`
 
 ### 2. Modify the env file to your environement:
-
+- If not alread done, clone the repo and access the right folder
+```bash
+git clone https://github.com/mabuelgh/intersight-ai-bridge
+cd intersight-ai-bridge/intersight
+```
 - Install the python dependencies:
 ```bash
 cd intersight
@@ -33,7 +37,7 @@ python generate_config.py --ubuntu
 - Go to System > Software Repository
 - Add the OS Image Link of the downloaded Ubuntu (you can put the image on any NFS, CIFS or HTTP like EasyUCS or IMM Transition Tool)
 - Add the SCU Link of the downloaded SCU (you can put the image on any NFS, CIFS or HTTP like EasyUCS or IMM Transition Tool)
-- Only if you do step 4bis afterward: Upload the OS Configuration file (the cfg file modified in step 1)
+- (Only if you want to install the OS through Intersight UI) Upload the OS Configuration file (the cfg file modified in part 2)
 
 ### 4. Install Operating System with Python
 - Make sure Intersight package is installed 
