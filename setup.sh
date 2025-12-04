@@ -38,6 +38,11 @@ https_proxy=$PROXY_URL
 FTP_PROXY=${PROXY_URL}/
 NO_PROXY=localhost,127.0.0.1,171.*,172.*,192.*,10.*,1.*" | sudo tee -a /etc/environment
 
+# Part 1-bis: Expanding root filesystem (optional)
+# sudo wipefs -a /dev/nvme0n1
+# sudo vgextend ubuntu-vg /dev/nvme0n1 /dev/sda1
+# sudo lvextend -l +100%FREE -r /dev/mapper/ubuntu--vg-ubuntu--lv
+
 # Part 2: Update and Upgrade the package list
 print_section_header "Updating the package list"
 # Remove the interactive dialog during package upgrades, only valable during this script execution

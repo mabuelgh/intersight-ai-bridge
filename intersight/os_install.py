@@ -10,12 +10,16 @@ import urllib3
 from intersight import signing
 from intersight.configuration import JSON_SCHEMA_VALIDATION_KEYWORDS
 from intersight.model.mo_mo_ref import MoMoRef
-from intersight.api import os_api
 from intersight.api import firmware_api
 from intersight.api import organization_api
 from intersight.api import compute_api
 from intersight.api import softwarerepository_api
+from intersight.api import bulk_api
 from intersight.model.os_install import OsInstall
+from intersight.model.os_answers import OsAnswers
+from intersight.model.os_virtual_drive import OsVirtualDrive
+from intersight.model.bulk_request import BulkRequest
+from intersight.model.bulk_rest_sub_request import BulkRestSubRequest
 
 
 # Load environment variables
@@ -107,37 +111,35 @@ def fetch_os_moid(name):
         print(e)
 
 def import_config_file(file_path):
-    with open(file_path, 'r') as f:
+    with open(file_path, 'r', encoding='utf-8') as f:
         config_data = f.read()
-        config_data = config_data.replace('\n', '\\n')
-        config_data = config_data.replace('"', '\\"')
+    config_data = config_data
     return config_data
 
 def add_os_install(server_moid, server_type, org_moid, OS_moid, SCU_moid, config_data):
     # Deploy OS Install
-    api = os_api.OsApi(apiClient)
+    api = bulk_api.BulkApi(apiClient)
+
     os_install = OsInstall()
     os_install.install_method = "vMedia"
     os_install.image = MoMoRef(moid=OS_moid, object_type="softwarerepository.OperatingSystemFile")
     os_install.osdu_image = MoMoRef(moid=SCU_moid, object_type="firmware.ServerConfigurationUtilityDistributable")
     os_install.override_secure_boot = True
     os_install.organization = MoMoRef(moid=org_moid, object_type="organization.Organization")
-    os_install.answers = {
-        "AnswerFile": config_data,
-        "Source": "File"
-    }
-    os_install.install_target = {
-        "ObjectType": "os.VirtualDrive",
-        "Name": "MStorBootVd",
-        "StorageControllerSlotId": "MSTOR-RAID",
-        "Id": "0",
-        "ClassId": "os.VirtualDrive"
-    }
+    os_install.answers = OsAnswers(
+        source="File",
+        answer_file=config_data
+    )
+    os_install.install_target = OsVirtualDrive(class_id="os.VirtualDrive", object_type="os.VirtualDrive", name="MStorBootVd",storage_controller_slot_id="MSTOR-RAID", id="0")
     os_install.server = MoMoRef(moid=server_moid, object_type=server_type)
 
+
+    sub_request = BulkRestSubRequest(object_type="bulk.RestSubRequest", body=os_install)
+    bulk_request = BulkRequest(verb="POST", uri="/v1/os/Installs",requests=[sub_request])
+
     try:
-        api_response = api.create_os_install(os_install)
-        print(api_response)
+        api_response = api.create_bulk_request(bulk_request)
+        print("OS Install deployment initiated successfully.")
     except Exception as e:
         print(e)
 

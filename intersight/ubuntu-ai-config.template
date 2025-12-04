@@ -7,8 +7,6 @@ autoinstall:
     - export use_proxy=yes # This variable is less common for general system proxy
     - export http_proxy=${PROXY_URL}
     - export https_proxy=${PROXY_URL}
-  late-commands:
-    - sudo lvextend -l +100%FREE -r /dev/mapper/ubuntu--vg-ubuntu--lv
   # Configure the network
   # Modify the gateway4 and nameservers to your local settings
   network:
@@ -34,8 +32,6 @@ autoinstall:
   late-commands:
     - OS_INSTALL_COMPLETED_STATUS_PLACEHOLDER
     - sudo systemctl start ssh
-    - sudo wipefs -a /dev/nvme0n1
-    - sudo vgextend ubuntu-vg /dev/nvme0n1 /dev/sda1
   
   # Install the following standard packages using apt
   packages:
