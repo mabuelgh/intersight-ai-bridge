@@ -8,7 +8,7 @@
 - On a system that has access to the Intersight account:
 ```bash
 git clone https://github.com/mabuelgh/intersight-ai-bridge
-cd cd intersight-ai-bridge/intersight
+cd intersight-ai-bridge/intersight
 git clone https://github.com/vesposito/easyucs.git
 ```
 

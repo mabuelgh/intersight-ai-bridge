@@ -106,6 +106,7 @@ Launch vLLMs with curl containers:
 
 ## Features and improvements to come
 - Put scenario 3 python utilisation inside a container instead of on the OS directly
+- Put env variables for Step 3 deployment
 
 ## Authors
 

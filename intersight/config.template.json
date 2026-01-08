@@ -628,6 +628,52 @@
                   ]
                }
             ],
+            "ipmi_over_lan_policies": [
+               {
+                  "enabled": true,
+                  "name": "IAIB-IPMI-Over-LAN",
+                  "privilege_level": "admin",
+                  "tags": [
+                     {
+                        "key": "origin",
+                        "value": "intersight-ai-bridge"
+                     }
+                  ]
+               }
+            ],
+            "power_policies": [
+               {
+                  "dynamic_power_rebalancing": "Enabled",
+                  "extended_power_capacity": "Enabled",
+                  "name": "IAIB-Power",
+                  "power_allocation": 0,
+                  "power_priority": "Low",
+                  "power_profiling": "Enabled",
+                  "power_redundancy": "Grid",
+                  "power_save_mode": "Enabled",
+                  "processor_package_power_limit": "Default",
+                  "tags": [
+                     {
+                        "key": "origin",
+                        "value": "intersight-ai-bridge"
+                     }
+                  ]
+               }
+            ],
+            "virtual_media_policies": [
+               {
+                  "enable_low_power_usb": true,
+                  "enable_virtual_media": true,
+                  "enable_virtual_media_encryption": true,
+                  "name": "IAIB-Virtual-Media",
+                  "tags": [
+                     {
+                        "key": "origin",
+                        "value": "intersight-ai-bridge"
+                     }
+                  ]
+               }
+            ],
             "imc_access_policies": [
                {
                   "inband_configuration": true,
@@ -835,6 +881,9 @@
                   "imc_access_policy": "IAIB-IMC-Access",
                   "lan_connectivity_policy": "IAIB-IMM-LAN-Conn",
                   "local_user_policy": "IAIB-Admin-Local-User",
+                  "ipmi_over_lan_policy": "IAIB-IPMI-Over-LAN",
+                  "power_policy": "IAIB-Power",
+                  "virtual_media_policy": "IAIB-Virtual-Media",
                   "name": "${SERVER_PROFILE_NAME}",
                   "storage_policy": "IAIB-M2-RAID",
                   "tags": [
