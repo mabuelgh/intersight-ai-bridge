@@ -1,4 +1,4 @@
-# mabuelgh - Oct 2025
+# mabuelgh - Jan 2026
 
 services:
   # vLLM instance on GPU 1
@@ -69,6 +69,166 @@ services:
   vllm-client-gpu-2:
     image: curlimages/curl:latest
     container_name: vllm-client-gpu-2
+    command: |
+      /bin/sh -c "
+        echo 'Waiting for vllm-gpu2 to be ready...';
+        while ! curl -s http://vllm-gpu2:8001/v1/health; do sleep 5; done;
+        echo 'vllm-gpu2 is ready. Starting query loop...';
+        while true; do
+          echo 'Sending embedding request to vllm-gpu2 ...';
+          curl -X POST http://vllm-gpu2:8001/v1/completions -H 'Content-Type: application/json' -d '{\"model\": \"/app/model/phi4\", \"prompt\": \"Tell me a short story about a snowy season.\", \"max_tokens\": 150, \"temperature\": 0.7}';
+          echo ''; # Newline for readability
+          sleep 10; # Query every 10 seconds
+        done
+      "
+    depends_on:
+      - vllm-gpu2
+    restart: on-failure
+
+  # Client that regularly queries vllm-gpu1 for completions
+  vllm-client-gpu-3:
+    image: curlimages/curl:latest # A lightweight image with curl
+    container_name: vllm-client-gpu-3
+    command: |
+      /bin/sh -c "
+        echo 'Waiting for vllm-gpu1 to be ready...';
+        while ! curl -s http://vllm-gpu1:8000/v1/health; do sleep 5; done;
+        echo 'vllm-gpu1 is ready. Starting query loop...';
+        while true; do
+          echo 'Sending completion request to vllm-gpu1 ...';
+          curl -X POST http://vllm-gpu1:8000/v1/completions -H 'Content-Type: application/json' -d '{\"model\": \"/app/model/phi4\", \"prompt\": \"Tell me a short story about a brave knight and a dragon.\", \"max_tokens\": 150, \"temperature\": 0.7}';
+          echo ''; # Newline for readability
+          sleep 1; # Query every 1 second
+        done
+      "
+    depends_on:
+      - vllm-gpu1
+    restart: on-failure
+
+  # Client that regularly queries vllm-gpu2 for completions
+  vllm-client-gpu-4:
+    image: curlimages/curl:latest
+    container_name: vllm-client-gpu-4
+    command: |
+      /bin/sh -c "
+        echo 'Waiting for vllm-gpu2 to be ready...';
+        while ! curl -s http://vllm-gpu2:8001/v1/health; do sleep 5; done;
+        echo 'vllm-gpu2 is ready. Starting query loop...';
+        while true; do
+          echo 'Sending embedding request to vllm-gpu2 ...';
+          curl -X POST http://vllm-gpu2:8001/v1/completions -H 'Content-Type: application/json' -d '{\"model\": \"/app/model/phi4\", \"prompt\": \"Tell me a short story about a snowy season.\", \"max_tokens\": 150, \"temperature\": 0.7}';
+          echo ''; # Newline for readability
+          sleep 1; # Query every 1 second
+        done
+      "
+    depends_on:
+      - vllm-gpu2
+    restart: on-failure
+
+  # Client that regularly queries vllm-gpu1 for completions
+  vllm-client-gpu-5:
+    image: curlimages/curl:latest # A lightweight image with curl
+    container_name: vllm-client-gpu-5
+    command: |
+      /bin/sh -c "
+        echo 'Waiting for vllm-gpu1 to be ready...';
+        while ! curl -s http://vllm-gpu1:8000/v1/health; do sleep 5; done;
+        echo 'vllm-gpu1 is ready. Starting query loop...';
+        while true; do
+          echo 'Sending completion request to vllm-gpu1 ...';
+          curl -X POST http://vllm-gpu1:8000/v1/completions -H 'Content-Type: application/json' -d '{\"model\": \"/app/model/phi4\", \"prompt\": \"Tell me a short story about a brave knight and a dragon.\", \"max_tokens\": 150, \"temperature\": 0.7}';
+          echo ''; # Newline for readability
+          sleep 5; # Query every 5 seconds
+        done
+      "
+    depends_on:
+      - vllm-gpu1
+    restart: on-failure
+
+  # Client that regularly queries vllm-gpu2 for completions
+  vllm-client-gpu-6:
+    image: curlimages/curl:latest
+    container_name: vllm-client-gpu-6
+    command: |
+      /bin/sh -c "
+        echo 'Waiting for vllm-gpu2 to be ready...';
+        while ! curl -s http://vllm-gpu2:8001/v1/health; do sleep 5; done;
+        echo 'vllm-gpu2 is ready. Starting query loop...';
+        while true; do
+          echo 'Sending embedding request to vllm-gpu2 ...';
+          curl -X POST http://vllm-gpu2:8001/v1/completions -H 'Content-Type: application/json' -d '{\"model\": \"/app/model/phi4\", \"prompt\": \"Tell me a short story about a snowy season.\", \"max_tokens\": 150, \"temperature\": 0.7}';
+          echo ''; # Newline for readability
+          sleep 5; # Query every 5 seconds
+        done
+      "
+    depends_on:
+      - vllm-gpu2
+    restart: on-failure
+
+  # Client that regularly queries vllm-gpu1 for completions
+  vllm-client-gpu-7:
+    image: curlimages/curl:latest # A lightweight image with curl
+    container_name: vllm-client-gpu-7
+    command: |
+      /bin/sh -c "
+        echo 'Waiting for vllm-gpu1 to be ready...';
+        while ! curl -s http://vllm-gpu1:8000/v1/health; do sleep 5; done;
+        echo 'vllm-gpu1 is ready. Starting query loop...';
+        while true; do
+          echo 'Sending completion request to vllm-gpu1 ...';
+          curl -X POST http://vllm-gpu1:8000/v1/completions -H 'Content-Type: application/json' -d '{\"model\": \"/app/model/phi4\", \"prompt\": \"Tell me a short story about a brave knight and a dragon.\", \"max_tokens\": 150, \"temperature\": 0.7}';
+          echo ''; # Newline for readability
+          sleep 30; # Query every 30 seconds
+        done
+      "
+    depends_on:
+      - vllm-gpu1
+    restart: on-failure
+
+  # Client that regularly queries vllm-gpu2 for completions
+  vllm-client-gpu-8:
+    image: curlimages/curl:latest
+    container_name: vllm-client-gpu-8
+    command: |
+      /bin/sh -c "
+        echo 'Waiting for vllm-gpu2 to be ready...';
+        while ! curl -s http://vllm-gpu2:8001/v1/health; do sleep 5; done;
+        echo 'vllm-gpu2 is ready. Starting query loop...';
+        while true; do
+          echo 'Sending embedding request to vllm-gpu2 ...';
+          curl -X POST http://vllm-gpu2:8001/v1/completions -H 'Content-Type: application/json' -d '{\"model\": \"/app/model/phi4\", \"prompt\": \"Tell me a short story about a snowy season.\", \"max_tokens\": 150, \"temperature\": 0.7}';
+          echo ''; # Newline for readability
+          sleep 30; # Query every 30 seconds
+        done
+      "
+    depends_on:
+      - vllm-gpu2
+    restart: on-failure
+
+  # Client that regularly queries vllm-gpu1 for completions
+  vllm-client-gpu-9:
+    image: curlimages/curl:latest # A lightweight image with curl
+    container_name: vllm-client-gpu-9
+    command: |
+      /bin/sh -c "
+        echo 'Waiting for vllm-gpu1 to be ready...';
+        while ! curl -s http://vllm-gpu1:8000/v1/health; do sleep 5; done;
+        echo 'vllm-gpu1 is ready. Starting query loop...';
+        while true; do
+          echo 'Sending completion request to vllm-gpu1 ...';
+          curl -X POST http://vllm-gpu1:8000/v1/completions -H 'Content-Type: application/json' -d '{\"model\": \"/app/model/phi4\", \"prompt\": \"Tell me a short story about a brave knight and a dragon.\", \"max_tokens\": 150, \"temperature\": 0.7}';
+          echo ''; # Newline for readability
+          sleep 15; # Query every 15 seconds
+        done
+      "
+    depends_on:
+      - vllm-gpu1
+    restart: on-failure
+
+  # Client that regularly queries vllm-gpu2 for completions
+  vllm-client-gpu-10:
+    image: curlimages/curl:latest
+    container_name: vllm-client-gpu-10
     command: |
       /bin/sh -c "
         echo 'Waiting for vllm-gpu2 to be ready...';

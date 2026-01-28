@@ -39,7 +39,7 @@ sudo hf download $LLM_EMBEDDING_MODEL --local-dir ./models/$LLM_EMBEDDING_MODEL_
 # Part 2: Set up Docker containers
 print_section_header "Setup Docker Containers"
 if sudo docker compose -f docker-compose-vllm-RAG.yml up -d; then
-    pip install --break-system-packages -r python_rag_requirements.txt
+    pip install --break-system-packages -r python_rag_requirements.txt --no-warn-script-location
     echo "Docker image built successfully and container running successfully."
     print_subsection_header "It might take a few moments to be available, when finished press enter to initiate chat with RAG context."
     read -r
