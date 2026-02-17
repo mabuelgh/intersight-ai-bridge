@@ -2,17 +2,27 @@
 
 Intersight AI Bridge **simplifies and accelerates** the initial installation and usage of **AI workloads** such as Cisco AI Pods.
 
-> **Note**: Starting from **Step 3**, these tools can also be used on any Linux system, even without Cisco UCS hardware.
+> [!NOTE]
+> Starting from **Step 3**, these tools can also be used on any Linux system, without Cisco UCS hardware or Intersight licenses.
+
+<h6>
+
+[![DEVNET-2488](./misc/DEVNET-2488_Page_06.png)](https://www.ciscolive.com/c/dam/r/ciscolive/emea/docs/2026/pdf/DEVNET-2488.pdf)
+Featured at Cisco Live 2026 EMEA : [DEVNET-2488](https://www.ciscolive.com/c/dam/r/ciscolive/emea/docs/2026/pdf/DEVNET-2488.pdf)
+</h6>
 
 This project provides scripts and configurations to:  
 1. Deploy a **Server Profile** on Cisco Intersight.  
 2. Install an **Operating System** through the Intersight OS Install feature (requires an *Advantage* license, otherwise can be done manually).  
-3. **Set up your environment for GPU-based AI workloads** with four possible use cases:  
+3. Automated set up of the **environment** for GPU based infrastructure
+4. **Deploy AI workloads** with four possible use cases:  
    - **Chatbot with vLLM + OpenWebUI**  
    - **Chatbot with Text Generation WebUI**  
    - **Chatbot with vLLM + Retrieval-Augmented Generation (RAG)**
    - **Stresstest with vLLM**
 
+> [!TIP]
+> Each step can be used independently.
 
 ## Getting Started
 
@@ -56,7 +66,7 @@ This project provides scripts and configurations to:
    
    This process will trigger the creation of a Docker container. It will then display your GPUs inside the container to confirm the Nvidia container toolkit installation.
 
-## Use Case Scenarios
+## Use Case Scenarios (Step 4)
 
 After setup, choose one of the following scenarios:
 
@@ -94,7 +104,8 @@ Launch vLLMs with curl containers:
 ```bash
 ./scenario4.sh
 ```
-**Note**: This scenario was made for dual GPU infra, remove the "gpu2" containers in *docker-compose-vllm-stresstest.yml* if necessary.
+> [!IMPORTANT]
+> This scenario was made for dual GPU infra, remove the "gpu2" containers in *docker-compose-vllm-stresstest.yml* if necessary.
 
 
 ## Notes
@@ -102,9 +113,11 @@ Launch vLLMs with curl containers:
 - Steps 1 and 2 are optional if you’re not using Cisco Intersight  
 - Scripts are modular, feel free to adapt them for your environment
 - Tested with **ubuntu-24.04.3-live-server** on Cisco UCSX-210C-M7 with **NVIDIA L40S GPU**
+- This project was featured at Cisco Live 2026 EMEA : [DEVNET-2488](https://www.ciscolive.com/c/dam/r/ciscolive/emea/docs/2026/pdf/DEVNET-2488.pdf)
 
 
 ## Features and improvements to come
+- Add OpenShift deployment compatibility and guide
 - Put scenario 3 python utilisation inside a container instead of on the OS directly
 - Put env variables for Step 3 deployment
 
