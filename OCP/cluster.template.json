@@ -1,0 +1,14 @@
+{
+    "name": "${CLUSTER_NAME}",
+    "openshift_version": "${OPENSHIFT_VERSION}",
+    "cpu_architecture": "${CPU_ARCH}",
+    "base_dns_domain": "${BASE_DOMAIN}",
+    "cluster_network_cidr": "${CLUSTER_NETWORK_CIDR}",
+    "cluster_network_host_prefix": ${CLUSTER_NETWORK_HOST_PREFIX},
+    "service_network_cidr": "${SERVICE_NETWORK_CIDR}",
+    "machine_network_gateway": "${MACHINE_NETWORK_GATEWAY}",
+    "iso": "${ISO}",
+    "ntp": "${NTP}",
+    "dns_ip": "${DNS_IP}",
+    "dns_search": "${DNS_SEARCH}"
+}

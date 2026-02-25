@@ -13,3 +13,15 @@ LabBruAPIv3-SecretKey.txt
 /intersight/easyucs
 intersight/config.json
 intersight/.env copy
+OCP/.env
+OCP/cluster.json
+OCP/proxy.json
+OCP/pull-secret.txt
+OCP/redfish.json
+OCP/server.json
+OCP/ssh
+OCP/ssh.pub
+OCP/token.txt
+OCP/web.json
+OCP/iserver/
+OCP/kubeconfig

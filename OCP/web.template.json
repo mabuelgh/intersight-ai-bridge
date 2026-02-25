@@ -1,0 +1,7 @@
+{
+    "ip": "${WEB_IP}",
+    "username": "${WEB_USERNAME}",
+    "password": "${WEB_PASSWORD}",
+    "image_base_url": "${IMAGE_BASE_URL}",
+    "image_upload_directory": "${IMAGE_UPLOAD_DIRECTORY}"
+}

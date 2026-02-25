@@ -35,9 +35,12 @@ pip install -r requirements.txt
 cp .env.example .env
 nano .env
 ```
-- Launch the config generation script:
+> [!CAUTION]
+> For next script, be careful to use the proper python parameter depending on the desired outcome: OpenShift or Ubuntu
+- Launch the right config generation script:
 ```bash
-python generate_config.py --json
+python generate_config.py --json # for Ubuntu
+python generate_config.py --ocp # for OpenShift
 ```
 - Execute EasyUCS script inside */easyucs* folder : 
 ```bash

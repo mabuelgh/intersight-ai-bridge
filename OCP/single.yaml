@@ -1,0 +1,24 @@
+interfaces:
+- name: ${IFNAME}.${VLAN}
+  type: vlan
+  state: up
+  vlan:
+    base-iface: ${IFNAME}
+    id: ${VLAN}
+  ipv4:
+    address:
+    - ip: ${IP}
+      prefix-length: ${PREFIX}
+    dhcp: false
+    enabled: true
+routes:
+  config:
+  - destination: 0.0.0.0/0
+    next-hop-address: ${GW}
+    next-hop-interface: ${IFNAME}.${VLAN}
+dns-resolver:
+  config:
+    search:
+    - ${DNS_SEARCH}
+    server:
+    - ${DNS_IP}

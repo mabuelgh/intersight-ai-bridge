@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tensorflow-jupyter-notebook
+  labels:
+    app: tensorflow-jupyter-notebook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tensorflow-jupyter-notebook
+  template:
+    metadata:
+      labels:
+        app: tensorflow-jupyter-notebook
+    spec:
+      containers:
+        - name: tensorflow-container
+          image: nvcr.io/nvidia/tensorflow:25.02-tf2-py3
+          ports:
+            - containerPort: 8888
+          command: ["jupyter-notebook"]
+          args: ["--NotebookApp.token=''"]
+          env:
+            # Existing JUPYTER_DATA_DIR
+            - name: JUPYTER_DATA_DIR
+              value: "/tmp/jupyter_data"
+            # Explicitly set HOME to a writable directory
+            - name: HOME
+              value: "/tmp"
+            # Direct IPython's main directory to a writable location
+            - name: IPYTHONDIR
+              value: "/tmp/.ipython"
+            # Direct Jupyter's configuration directory to a writable location
+            - name: JUPYTER_CONFIG_DIR
+              value: "/tmp/.jupyter"
+            # Direct Jupyter's runtime files directory to a writable location
+            - name: JUPYTER_RUNTIME_DIR
+              value: "/tmp/jupyter_runtime"
+          imagePullSecrets:
+            - name: ngc-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tensorflow-jupyter-notebook
+spec:
+  type: NodePort
+  selector:
+    app: tensorflow-jupyter-notebook
+  ports:
+    - protocol: TCP
+      port: 8888
+      targetPort: 8888
+      nodePort: 30040

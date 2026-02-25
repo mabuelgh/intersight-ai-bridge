@@ -1,0 +1,4 @@
+{
+    "username": "${IMC_USERNAME}",
+    "password": "${IMC_PASSWORD}"
+}

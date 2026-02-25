@@ -67,6 +67,7 @@ def main():
     parser = argparse.ArgumentParser(description='Generate configuration files from templates')
     parser.add_argument('--ubuntu', action='store_true', help='Generate Ubuntu config')
     parser.add_argument('--json', action='store_true', help='Generate JSON config')
+    parser.add_argument('--ocp', action='store_true', help='Generate JSON config for OCP')
     parser.add_argument('--all', action='store_true', help='Generate all configs')
     
     args = parser.parse_args()
@@ -74,11 +75,14 @@ def main():
     if args.all or args.ubuntu:
         generate_ubuntu_config()
     
-    if args.all or args.json:
+    if args.ocp:
+        generate_json_config(template_path="config.template.ocp.json")
+    
+    elif args.all or args.json:
         generate_json_config()
     
-    if not any([args.ubuntu, args.json, args.all]):
-        print("Please specify --ubuntu, --json, or --all")
+    if not any([args.ubuntu, args.json, args.ocp, args.all]):
+        print("Please specify --ubuntu, --json, --ocp, or --all")
         parser.print_help()
 
 if __name__ == "__main__":

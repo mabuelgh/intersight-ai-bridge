@@ -1,0 +1,35 @@
+kind: NIMCache
+apiVersion: apps.nvidia.com/v1alpha1
+metadata:
+  name: meta-llama3-1b-instruct
+  namespace: openshift-operators
+spec:
+  source:
+    ngc:
+      modelPuller: 'nvcr.io/nim/meta/llama-3.2-1b-instruct:1.12.0'
+      pullSecret: ngc-secret
+      authSecret: ngc-api-secret
+
+      # ADD PROXY HERE — this is the missing part - Need to check if really usefull or not
+      env:
+        - name: HTTP_PROXY
+          value: "http://proxy-ams-1.cisco.com:80"
+        - name: HTTPS_PROXY
+          value: "http://proxy-ams-1.cisco.com:80"
+        - name: NO_PROXY
+          value: "localhost,.cisco.com,127.0.0.1,.svc,.cluster.local,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+      model:
+        profiles: []
+  storage:
+    pvc:
+      create: true
+      storageClass: local-nvme
+      size: 200Gi
+      volumeAccessMode: ReadWriteOnce
+
+  # keep this, it configures the controller (not the pod)
+  proxy:
+    httpProxy: "http://proxy-ams-1.cisco.com:80"
+    httpsProxy: "http://proxy-ams-1.cisco.com:80"
+    noProxy: "localhost,.cisco.com,127.0.0.1,.svc,.cluster.local,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+    certConfigMap: nim-empty-ca-configmap

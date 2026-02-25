@@ -1,0 +1,29 @@
+[
+    {
+        "nfd": {
+            "operator": {}
+        }
+    },    
+    {
+        "gpu": {
+            "operator": {}
+        }
+    },
+    {
+        "lso": {
+            "operator": {}
+        }
+    },
+    {
+        "nim": {
+            "operator": {}
+        }
+    },
+    {
+        "cli": {
+            "web": {
+                "operator": {}
+            }
+        }
+    }
+]

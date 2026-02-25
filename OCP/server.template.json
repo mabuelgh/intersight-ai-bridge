@@ -1,0 +1,21 @@
+[
+        {
+            "hostname": "${CLUSTER_NAME}",
+            "redfish": {
+                "endpoint_type": "${ENDPOINT_TYPE}",
+                "inventory_id": "${INVENTORY_ID}",
+                "endpoint_ip": "${ENDPOINT_IP}"
+            },
+            "ssh": {
+                "ip": "${DESIRED_OS_IP_ADDRESS}"
+            },
+            "vlan": "${VLAN}",
+            "interface": [
+                {
+                    "name": "${SERVER_INTERFACE_NAME}",
+                    "mac": "${SERVER_INTERFACE_MAC}"
+                }
+            ],
+            "nmstate": "${NMSTATE}"
+        }
+]
