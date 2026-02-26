@@ -90,9 +90,9 @@ sudo systemctl daemon-reload
 sudo systemctl restart docker
 
 # Part 3-bis : Install Portainer (Optional)
-print_section_header "Installing Portainer"
-sudo docker run -d -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
-print_section_header "Access the Portainer web interface at http://localhost:9000"
+# print_section_header "Installing Portainer"
+# sudo docker run -d -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
+# print_section_header "Access the Portainer web interface at http://localhost:9000"
 
 # Part 4: Install Nvidia Drivers
 print_section_header "Installing Nvidia Drivers"

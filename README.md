@@ -124,6 +124,11 @@ Launch vLLMs with curl containers:
 - You can monitor GPUs with commands: "**nvidia-smi**" & "**nvtop**"
 - **Intersight has native visibility over the GPU activity**, without OS Agent. You can monitor GPU metrics directly from Intersight server inventory or through the Metrics Explorer
 
+<img src="./misc/metrics_explorer.png" width="500" title="Picture of 2xGPU power consumption metrics in the Intersight Metrics Explorer" alt="Picture of 2xGPU power consumption metrics in the Intersight Metrics Explorer"/>
+
+<h6>
+Picture of 2xGPU power consumption metrics in the Intersight Metrics Explorer
+</h6>
 
 ## Notes
 - Scripts are modular, feel free to adapt them for your environment
@@ -133,7 +138,7 @@ Launch vLLMs with curl containers:
 
 ## Features and improvements to come
 - Launch yaml files through iserver (to avoid ssh connectivity steps) for RHEL deployment
-- Replace **"CLUSTER_NAME"**, **"DESIRED_OS_IP_ADDRESS"** or **"BASE_DOMAIN"** in OCP setup with variables like DESIRED_IP
+- Replace **"CLUSTER_NAME"**, **"DESIRED_OS_IP_ADDRESS"** or **"BASE_DOMAIN"** in OCP setup with variables like **DESIRED_IP**
 - Script the execution of all the cmds for OCP setup
 - Put Ubuntu AI scenario 3 python utilisation inside a container instead of on the OS directly
 - Put env variables for Ubuntu Step 3 deployment
@@ -141,7 +146,12 @@ Launch vLLMs with curl containers:
 
 
 ## Current limitations
-- Latest version of vLLM 0.15.1 seems to have compatibility issues with some CUDA and NVIDIA Drivers. If you encountered those, please use vllm/vllm-openai:v0.14.1 instead in the yml files.
+- Latest version of vLLM 0.15.1 seems to have compatibility issues with some CUDA and NVIDIA Drivers. If you encountered those, please use **vllm/vllm-openai:v0.14.1** instead in the docker compose yml files.
+
+
+## Projects used in Intersight AI Bridge
+- [EasyUCS](https://github.com/vesposito/easyucs)
+- [iserver](https://github.com/datacenter/iserver)
 
 
 ## Authors
