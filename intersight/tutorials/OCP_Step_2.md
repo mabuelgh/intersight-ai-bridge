@@ -7,11 +7,6 @@
    # git clone https://github.com/mabuelgh/intersight-ai-bridge.git # if not already done for step 1
    cd intersight-ai-bridge/OCP
    git clone https://github.com/datacenter/iserver.git
-
-   curl -L https://github.com/datacenter/iserver/archive/refs/tags/v0.28.34.tar.gz > iserver.tar.gz
-   tar -xvf iserver.tar.gz
-   mv iserver-0.28.34 iserver
-   rm iserver.tar.gz
    ```
 
 2. Set the environnement variables:
@@ -42,7 +37,7 @@
 
 6. Get pull-secret on RedHat Website
 
-   https://console.redhat.com/openshift/install/pull-secret downlaod as "pull-secret.txt" and put it inside the folder
+   https://console.redhat.com/openshift/install/pull-secret download as "pull-secret.txt" and put it inside the folder
 
 7. Get token on RedHat Website 
 
@@ -74,7 +69,7 @@
 11. Configure iserver:
    ```bash
    cd iserver
-   python iserver.py set ocp console --token ../token.txt --secret ../pull-secret.
+   python iserver.py set ocp console --token ../token.txt --secret ../pull-secret.txt
    ```
 
 12. Create the OpenShift Cluster:
@@ -82,4 +77,6 @@
    python iserver.py create ocp cluster bm --dir ../ --mode install
    ```
 
-13. Go get a coffee as it will take some time ☕️
+13. You can check the progress and the generated configuration: https://console.redhat.com/openshift/cluster-list
+
+14. Go get a coffee as it will take some time ☕️ 
