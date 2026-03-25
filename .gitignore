@@ -25,3 +25,4 @@ OCP/token.txt
 OCP/web.json
 OCP/iserver/
 OCP/kubeconfig
+intersight/.env.srv1

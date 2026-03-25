@@ -494,6 +494,15 @@
                         "device_name": "Disk",
                         "device_type": "local_disk",
                         "enabled": true,
+                        "bootloader_description": "Ubuntu",
+                        "bootloader_name": "shimx64.efi",
+                        "bootloader_path": "\\EFI\\ubuntu\\shimx64.efi",
+                        "slot": ""
+                     },
+                     {
+                        "device_name": "LocalD",
+                        "device_type": "local_disk",
+                        "enabled": true,
                         "slot": ""
                      },
                      {

@@ -110,7 +110,6 @@ Once running, you can ask questions such as:
 - *"What's the business of Nimbus Orchard?"*  
 - *"What is LuminaTech Solutions?"*
 
-
 #### 4. Showcase regular GPU usage (Stresstest): vLLM
 Launch vLLMs with curl containers:
 ```bash
@@ -142,7 +141,6 @@ Picture of 2xGPU power consumption metrics in the Intersight Metrics Explorer
 - Script the execution of all the cmds for OCP setup
 - Put Ubuntu AI scenario 3 python utilisation inside a container instead of on the OS directly
 - Put env variables for Ubuntu Step 3 deployment
-- Sometimes the boot order doesn't have Ubuntu as the first device to boot on
 
 
 ## Current limitations
