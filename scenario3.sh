@@ -1,13 +1,14 @@
 #!/bin/bash
 
-# Description: This script runs a 3 containers : one for text generation, one for embeddings, and one for open-webui. Then execute a python script to use the RAG file context.
-# mabuelgh - Sep 2025
+# Description: This script runs a 3 containers : one for text generation, one for embeddings, and one for open-webui. Then execute a script to deploy RAG file context.
+# mabuelgh - Mar 2026
 
 # Variables
-LLM_MODEL="microsoft/Phi-4-mini-instruct"
-LLM_EMBEDDING_MODEL="Qwen/Qwen3-Embedding-0.6B"
+LLM_MODEL="mistralai/Ministral-3-14B-Instruct-2512"
+LLM_EMBEDDING_MODEL="BAAI/bge-base-en-v1.5" # Alternative embedding model, to test
 LLM_MODEL_FOLDER="${LLM_MODEL#*/}"
 LLM_EMBEDDING_MODEL_FOLDER="${LLM_EMBEDDING_MODEL#*/}"
+INTERFACE="eno5" # For UCS-X compute node
 
 
 # Part 0: Functions to create section and subsection headers
@@ -38,12 +39,15 @@ sudo hf download $LLM_EMBEDDING_MODEL --local-dir ./models/$LLM_EMBEDDING_MODEL_
 
 # Part 2: Set up Docker containers
 print_section_header "Setup Docker Containers"
+IP_ADDRESS=$(ip -4 addr show $INTERFACE | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
 if sudo docker compose -f docker-compose-vllm-RAG.yml up -d; then
-    pip install --break-system-packages -r python_rag_requirements.txt --no-warn-script-location
     echo "Docker image built successfully and container running successfully."
-    print_subsection_header "It might take a few moments to be available, when finished press enter to initiate chat with RAG context."
+    print_subsection_header "When the model are deployed, press enter to continue and initiate chat with RAG context in Open WebUI."
     read -r
-    python3 retrieval_augmented_generation_with_langchain.py --directory-path ./rag-files/
+    # We need to make this curl operation to initiate the creation of a "no auth" user first, then we can execute the rag.sh script to create the knowledge base and upload files, which requires the token from a real user.
+    curl -H "Content-Type: application/json" -d '{"email":"","password":""}' http://127.0.0.1:3001/api/v1/auths/signin > /dev/null 2>&1    
+    ./initiate_rag.sh
+    print_subsection_header "Access the web interface at http://$IP_ADDRESS:3001"
 else
     echo "Failed to build Docker image or to run Docker container."
     exit 1

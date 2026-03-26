@@ -102,7 +102,8 @@ Launch vLLMs with RAG for file-based context:
 ./scenario3.sh
 ```
 **Note**: This project comes with sample files about fictives company descriptions.<br>
-For dual GPU infra, another file *docker-compose-vllm-RAG-dual-GPU.yml* can be used instead of *docker-compose-vllm-RAG.yml*.
+> [!IMPORTANT]
+> Once the script finished, make sure to use the right model for RAG. On the top left of the Web OpenUI portal, select **Model with knowledge.**
 
 #### 📖 Sample of questions to ask based on the RAG files in the project
 Once running, you can ask questions such as:
@@ -139,7 +140,6 @@ Picture of 2xGPU power consumption metrics in the Intersight Metrics Explorer
 - Launch yaml files through iserver (to avoid ssh connectivity steps) for RHEL deployment
 - Replace **"CLUSTER_NAME"**, **"DESIRED_OS_IP_ADDRESS"** or **"BASE_DOMAIN"** in OCP setup with variables like **DESIRED_IP**
 - Script the execution of all the cmds for OCP setup
-- Put Ubuntu AI scenario 3 python utilisation inside a container instead of on the OS directly
 - Put env variables for Ubuntu Step 3 deployment
 
 

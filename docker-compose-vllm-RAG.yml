@@ -1,15 +1,13 @@
-# mabuelgh - Sep 2025
-
-name: vllm-and-open-webui
 services:
-  vllm:
-    image: vllm/vllm-openai:latest
-    container_name: vllm
-    command: --model /app/model/ --gpu-memory-utilization=0.4 --max-model-len=2048
+  # vLLM instance on GPU 1
+  vllm-gpu:
+    image: vllm/vllm-openai:v0.14.1
+    container_name: vllm-mistral
+    command: --model /app/model/ --port 8001 --max-model-len 32768 --dtype bfloat16
     volumes:
-      - ./models/Phi-4-mini-instruct:/app/model
+      - ./models/Ministral-3-14B-Instruct-2512:/app/model
     ports:
-      - "8000:8000"
+      - "8001:8001"
     restart: always
     ipc: host
     environment:
@@ -20,40 +18,47 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              count: all
-              capabilities: [gpu]
-
-  vllm-embedded-llm:
-    image: vllm/vllm-openai:latest
-    container_name: vllm-embedded-llm
-    command: --model /app/model/rag --gpu-memory-utilization=0.4
-    volumes:
-      - ./models/Qwen3-Embedding-0.6B:/app/model/rag
-    ports:
-      - "8001:8000"
-    restart: always
-    ipc: host
-    environment:
-      - VLLM_USE_FLASHINFER_SAMPLER=0
-    runtime: nvidia
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
+              device_ids: ['1'] # Assigns the second GPU (index 1)
               capabilities: [gpu]
 
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
-    container_name: open-webui-for-vllm
+    container_name: open-webui
     volumes:
     - ./open-webui:/app/backend/data
     ports:
-      - "3000:8080"
+      - "3001:8080"
     environment:
-      - OPENAI_API_BASE_URL=http://vllm:8000/v1
+      - OPENAI_API_BASE_URL=http://vllm-mistral:8001/v1
       - OFFLINE_MODE=true
       - OPENAI_API_KEY=none
       - WEBUI_AUTH=false
+      - RAG_EMBEDDING_ENGINE=openai
+      - RAG_EMBEDDING_MODEL=/app/model/rag
+      - RAG_OPENAI_API_BASE_URL=http://vllm-embedding:8000/v1
+      - CHUNK_SIZE=300
+      - CHUNK_OVERLAP=30
+      - RAG_EMBEDDING_CONCURRENT_REQUESTS=2
     restart: always
+
+  # vLLM instance on GPU 0 for embedding model
+  vllm-embedding:
+    image: vllm/vllm-openai:v0.14.1
+    container_name: vllm-embedding
+    command: --model /app/model/rag 
+    volumes:
+      - ./models/bge-base-en-v1.5:/app/model/rag
+    ports:
+      - "8010:8000"
+    restart: always
+    ipc: host
+    environment:
+      - VLLM_USE_FLASHINFER_SAMPLER=0
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0'] 
+              capabilities: [gpu]
