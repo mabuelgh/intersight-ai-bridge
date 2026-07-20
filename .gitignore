@@ -26,3 +26,4 @@ OCP/web.json
 OCP/iserver/
 OCP/kubeconfig
 intersight/.env.srv1
+.python-version

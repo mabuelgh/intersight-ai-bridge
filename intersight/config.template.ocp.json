@@ -189,7 +189,7 @@
                   "mmcfg_base": "platform-default",
                   "mmioh_base": "platform-default",
                   "mmioh_size": "platform-default",
-                  "name": "IAIB-OCP-BIOS-HighPerf-M7-AI",
+                  "name": "${POLICIES_PREFIX}-OCP-BIOS-HighPerf-M7-AI",
                   "network_stack": "platform-default",
                   "numa_optimized": "platform-default",
                   "nvmdimm_perform_config": "platform-default",
@@ -505,7 +505,7 @@
                   ],
                   "boot_mode": "Uefi",
                   "enable_secure_boot": false,
-                  "name": "IAIB-OCP-Boot-on-disk",
+                  "name": "${POLICIES_PREFIX}-OCP-Boot-on-disk",
                   "tags": [
                      {
                         "key": "origin",
@@ -532,7 +532,7 @@
                      "interrupt_timer": 125,
                      "interrupts": 11
                   },
-                  "name": "IAIB-OCP-Eth-Adapt",
+                  "name": "${POLICIES_PREFIX}-OCP-Eth-Adapt",
                   "receive_queue_count": 8,
                   "receive_ring_size": 4096,
                   "roce_settings": {
@@ -574,7 +574,7 @@
                   "lldp_transmit_enable": true,
                   "mac_register_mode": "nativeVlanOnly",
                   "mac_security_forge": "allow",
-                  "name": "IAIB-OCP-Eth-Net-Control",
+                  "name": "${POLICIES_PREFIX}-OCP-Eth-Net-Control",
                   "tags": [
                      {
                         "key": "origin",
@@ -587,7 +587,7 @@
                {
                   "allowed_vlans": "${ALLOWED_VLANS}",
                   "enable_q_in_q_tunneling": false,
-                  "name": "IAIB-OCP-Eth-Net-Group",
+                  "name": "${POLICIES_PREFIX}-OCP-Eth-Net-Group",
                   "tags": [
                      {
                         "key": "origin",
@@ -599,7 +599,7 @@
             "ethernet_network_policies": [
                {
                   "default_vlan": 0,
-                  "name": "IAIB-OCP-Eth-Net",
+                  "name": "${POLICIES_PREFIX}-OCP-Eth-Net",
                   "tags": [
                      {
                         "key": "origin",
@@ -616,7 +616,7 @@
                   "class_of_service": 0,
                   "enable_trust_host_cos": false,
                   "mtu": 1500,
-                  "name": "IAIB-OCP-Eth-QoS",
+                  "name": "${POLICIES_PREFIX}-OCP-Eth-QoS",
                   "priority": "Best Effort",
                   "rate_limit": 0,
                   "tags": [
@@ -630,7 +630,7 @@
             "ipmi_over_lan_policies": [
                {
                   "enabled": true,
-                  "name": "IAIB-OCP-IPMI-Over-LAN",
+                  "name": "${POLICIES_PREFIX}-OCP-IPMI-Over-LAN",
                   "privilege_level": "admin",
                   "tags": [
                      {
@@ -644,7 +644,7 @@
                {
                   "dynamic_power_rebalancing": "Enabled",
                   "extended_power_capacity": "Enabled",
-                  "name": "IAIB-OCP-Power",
+                  "name": "${POLICIES_PREFIX}-OCP-Power",
                   "power_allocation": 0,
                   "power_priority": "Low",
                   "power_profiling": "Enabled",
@@ -664,7 +664,7 @@
                   "enable_low_power_usb": true,
                   "enable_virtual_media": true,
                   "enable_virtual_media_encryption": true,
-                  "name": "IAIB-OCP-Virtual-Media",
+                  "name": "${POLICIES_PREFIX}-OCP-Virtual-Media",
                   "tags": [
                      {
                         "key": "origin",
@@ -676,11 +676,11 @@
             "imc_access_policies": [
                {
                   "inband_configuration": true,
-                  "inband_ip_pool": "IAIB-OCP-KVM-IP-Pool",
+                  "inband_ip_pool": "${POLICIES_PREFIX}-OCP-KVM-IP-Pool",
                   "inband_vlan_id": ${INBAND_VLAN_ID},
                   "ipv4_address_configuration": true,
                   "ipv6_address_configuration": false,
-                  "name": "IAIB-OCP-IMC-Access",
+                  "name": "${POLICIES_PREFIX}-OCP-IMC-Access",
                   "out_of_band_configuration": false,
                   "tags": [
                      {
@@ -705,7 +705,7 @@
                      "primary_dns": "${MGMT_PRIMARY_DNS}",
                      "secondary_dns": "${MGMT_SECONDARY_DNS}"
                   },
-                  "name": "IAIB-OCP-KVM-IP-Pool",
+                  "name": "${POLICIES_PREFIX}-OCP-KVM-IP-Pool",
                   "tags": [
                      {
                         "key": "origin",
@@ -717,7 +717,7 @@
             "lan_connectivity_policies": [
                {
                   "enable_azure_stack_host_qos": false,
-                  "name": "IAIB-OCP-IMM-LAN-Conn",
+                  "name": "${POLICIES_PREFIX}-OCP-IMM-LAN-Conn",
                   "tags": [
                      {
                         "key": "origin",
@@ -733,14 +733,14 @@
                         "cdn_source": "vnic",
                         "cdn_value": "admin-a",
                         "enable_failover": false,
-                        "ethernet_adapter_policy": "IAIB-OCP-Eth-Adapt",
-                        "ethernet_network_control_policy": "IAIB-OCP-Eth-Net-Control",
+                        "ethernet_adapter_policy": "${POLICIES_PREFIX}-OCP-Eth-Adapt",
+                        "ethernet_network_control_policy": "${POLICIES_PREFIX}-OCP-Eth-Net-Control",
                         "ethernet_network_group_policies": [
-                           "IAIB-OCP-Eth-Net-Group"
+                           "${POLICIES_PREFIX}-OCP-Eth-Net-Group"
                         ],
-                        "ethernet_qos_policy": "IAIB-OCP-Eth-QoS",
+                        "ethernet_qos_policy": "${POLICIES_PREFIX}-OCP-Eth-QoS",
                         "mac_address_allocation_type": "pool",
-                        "mac_address_pool": "IAIB-OCP-MAC-Pool",
+                        "mac_address_pool": "${POLICIES_PREFIX}-OCP-MAC-Pool",
                         "name": "admin-a",
                         "pci_order": 0,
                         "switch_id": "A"
@@ -751,14 +751,14 @@
                         "cdn_source": "vnic",
                         "cdn_value": "data-a",
                         "enable_failover": false,
-                        "ethernet_adapter_policy": "IAIB-OCP-Eth-Adapt",
-                        "ethernet_network_control_policy": "IAIB-OCP-Eth-Net-Control",
+                        "ethernet_adapter_policy": "${POLICIES_PREFIX}-OCP-Eth-Adapt",
+                        "ethernet_network_control_policy": "${POLICIES_PREFIX}-OCP-Eth-Net-Control",
                         "ethernet_network_group_policies": [
-                           "IAIB-OCP-Eth-Net-Group"
+                           "${POLICIES_PREFIX}-OCP-Eth-Net-Group"
                         ],
-                        "ethernet_qos_policy": "IAIB-OCP-Eth-QoS",
+                        "ethernet_qos_policy": "${POLICIES_PREFIX}-OCP-Eth-QoS",
                         "mac_address_allocation_type": "pool",
-                        "mac_address_pool": "IAIB-OCP-MAC-Pool",
+                        "mac_address_pool": "${POLICIES_PREFIX}-OCP-MAC-Pool",
                         "name": "data-a",
                         "pci_order": 1,
                         "switch_id": "A"
@@ -769,14 +769,14 @@
                         "cdn_source": "vnic",
                         "cdn_value": "admin-b",
                         "enable_failover": false,
-                        "ethernet_adapter_policy": "IAIB-OCP-Eth-Adapt",
-                        "ethernet_network_control_policy": "IAIB-OCP-Eth-Net-Control",
+                        "ethernet_adapter_policy": "${POLICIES_PREFIX}-OCP-Eth-Adapt",
+                        "ethernet_network_control_policy": "${POLICIES_PREFIX}-OCP-Eth-Net-Control",
                         "ethernet_network_group_policies": [
-                           "IAIB-OCP-Eth-Net-Group"
+                           "${POLICIES_PREFIX}-OCP-Eth-Net-Group"
                         ],
-                        "ethernet_qos_policy": "IAIB-OCP-Eth-QoS",
+                        "ethernet_qos_policy": "${POLICIES_PREFIX}-OCP-Eth-QoS",
                         "mac_address_allocation_type": "pool",
-                        "mac_address_pool": "IAIB-OCP-MAC-Pool",
+                        "mac_address_pool": "${POLICIES_PREFIX}-OCP-MAC-Pool",
                         "name": "admin-b",
                         "pci_order": 3,
                         "switch_id": "B"
@@ -787,14 +787,14 @@
                         "cdn_source": "vnic",
                         "cdn_value": "data-b",
                         "enable_failover": false,
-                        "ethernet_adapter_policy": "IAIB-OCP-Eth-Adapt",
-                        "ethernet_network_control_policy": "IAIB-OCP-Eth-Net-Control",
+                        "ethernet_adapter_policy": "${POLICIES_PREFIX}-OCP-Eth-Adapt",
+                        "ethernet_network_control_policy": "${POLICIES_PREFIX}-OCP-Eth-Net-Control",
                         "ethernet_network_group_policies": [
-                           "IAIB-OCP-Eth-Net-Group"
+                           "${POLICIES_PREFIX}-OCP-Eth-Net-Group"
                         ],
-                        "ethernet_qos_policy": "IAIB-OCP-Eth-QoS",
+                        "ethernet_qos_policy": "${POLICIES_PREFIX}-OCP-Eth-QoS",
                         "mac_address_allocation_type": "pool",
-                        "mac_address_pool": "IAIB-OCP-MAC-Pool",
+                        "mac_address_pool": "${POLICIES_PREFIX}-OCP-MAC-Pool",
                         "name": "data-b",
                         "pci_order": 2,
                         "switch_id": "B"
@@ -816,7 +816,7 @@
                         "password": "cisco123"
                      }
                   ],
-                  "name": "IAIB-OCP-Admin-Local-User",
+                  "name": "${POLICIES_PREFIX}-OCP-Admin-Local-User",
                   "notification_period": 15,
                   "password_expiry_duration": 90,
                   "password_history": 0,
@@ -836,7 +836,7 @@
                         "to": "00:25:B5:41:49:04"
                      }
                   ],
-                  "name": "IAIB-OCP-MAC-Pool",
+                  "name": "${POLICIES_PREFIX}-OCP-MAC-Pool",
                   "tags": [
                      {
                         "key": "origin",
@@ -853,7 +853,7 @@
                      "enable": true,
                      "name": "MStorBootVd"
                   },
-                  "name": "IAIB-OCP-M2-RAID",
+                  "name": "${POLICIES_PREFIX}-OCP-M2-RAID",
                   "single_drive_raid_configuration": {
                      "access_policy": "Default",
                      "disk_cache": "Default",
@@ -875,16 +875,16 @@
             ],
             "ucs_server_profiles": [
                {
-                  "bios_policy": "IAIB-OCP-BIOS-HighPerf-M7-AI",
-                  "boot_policy": "IAIB-OCP-Boot-on-disk",
-                  "imc_access_policy": "IAIB-OCP-IMC-Access",
-                  "lan_connectivity_policy": "IAIB-OCP-IMM-LAN-Conn",
-                  "local_user_policy": "IAIB-OCP-Admin-Local-User",
-                  "ipmi_over_lan_policy": "IAIB-OCP-IPMI-Over-LAN",
-                  "power_policy": "IAIB-OCP-Power",
-                  "virtual_media_policy": "IAIB-OCP-Virtual-Media",
+                  "bios_policy": "${POLICIES_PREFIX}-OCP-BIOS-HighPerf-M7-AI",
+                  "boot_policy": "${POLICIES_PREFIX}-OCP-Boot-on-disk",
+                  "imc_access_policy": "${POLICIES_PREFIX}-OCP-IMC-Access",
+                  "lan_connectivity_policy": "${POLICIES_PREFIX}-OCP-IMM-LAN-Conn",
+                  "local_user_policy": "${POLICIES_PREFIX}-OCP-Admin-Local-User",
+                  "ipmi_over_lan_policy": "${POLICIES_PREFIX}-OCP-IPMI-Over-LAN",
+                  "power_policy": "${POLICIES_PREFIX}-OCP-Power",
+                  "virtual_media_policy": "${POLICIES_PREFIX}-OCP-Virtual-Media",
                   "name": "${SERVER_PROFILE_NAME}",
-                  "storage_policy": "IAIB-OCP-M2-RAID",
+                  "storage_policy": "${POLICIES_PREFIX}-OCP-M2-RAID",
                   "tags": [
                      {
                         "key": "origin",
