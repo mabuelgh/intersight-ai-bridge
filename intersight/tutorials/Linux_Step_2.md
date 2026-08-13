@@ -19,7 +19,6 @@ cd intersight-ai-bridge/intersight
 ```
 - Install the python dependencies:
 ```bash
-cd intersight
 pip install -r requirements.txt
 ```
 - If not already done, create a copy of ".env.example" and **modify that copy to match your environment**:
