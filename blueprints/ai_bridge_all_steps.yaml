@@ -1,0 +1,380 @@
+spec_version: 2
+description: Run all steps of the AI Bridge deployment, including server configuration, OS installation, and LLM setup.
+
+inputs:
+  agent:
+    type: agent
+  PROXY_URL:
+    type: string
+    default: 'http://your-proxy.company.com:80'
+  INTERSIGHT_API_KEY_ID:
+    type: string
+    default: 'your_api_key_id_here'
+  INTERSIGHT_PRIVATE_KEY:
+    type: string
+    default: '-----BEGIN EC PRIVATE KEY----- your_private_key_here -----END EC PRIVATE KEY-----'
+  INTERSIGHT_HOST:
+    type: string
+    default: 'https://intersight.com'
+  SERVER_SERIAL:
+    type: string
+    default: 'your_server_serial_here'
+  SERVER_NAME:
+    type: string
+    default: 'your_server_name_here'
+  SERVER_PROFILE_NAME:
+    type: string
+    default: 'IAIB-AI-IMM-1'
+  NATIVE_VLAN_ID:
+    type: string
+    default: '100'
+  ALLOWED_VLANS:
+    type: string
+    default: '100'
+  INBAND_VLAN_ID:
+    type: string
+    default: '100'
+  MGMT_IP_FROM:
+    type: string
+    default: '192.168.1.100'
+  MGMT_IP_TO:
+    type: string
+    default: '192.168.1.100'
+  MGMT_GATEWAY:
+    type: string
+    default: '192.168.1.1'
+  MGMT_PRIMARY_DNS:
+    type: string
+    default: '8.8.8.8'
+  MGMT_SECONDARY_DNS:
+    type: string
+    default: '8.8.4.4'
+  POLICIES_PREFIX:
+    type: string
+    default: 'IAIB'  
+  ORGANIZATION_NAME:
+    type: string
+    default: 'default'
+  OS_IMAGE_NAME:
+    type: string
+    default: 'ubuntu-24.04.3-live-server-amd64.iso'
+  SCU_IMAGE_NAME:
+    type: string
+    default: 'SCU.7.1.4.iso'
+  SERVER_IP_ADDRESS:
+    type: string
+    default: '192.168.1.100/24'
+  SERVER_GATEWAY:
+    type: string
+    default: '192.168.1.1'
+  SERVER_INTERFACE:
+    type: string
+    default: 'eno5'
+  SERVER_HOSTNAME:
+    type: string
+    default: 'ai-server'
+  SERVER_TIMEZONE:
+    type: string
+    default: 'UTC'
+  PRIMARY_DNS:
+    type: string
+    default: '8.8.8.8'
+  SECONDARY_DNS:
+    type: string
+    default: '8.8.4.4'
+  USE_CASE_SCENARIO:
+    type: string
+    default: '2'
+ 
+grains:
+  step1:
+    kind: shell
+    spec:
+      agent:
+        name: '{{ .inputs.agent }}'
+      # files:
+      #  - source: qualy_samples
+      #    path: scripts/setup.sh
+      env-vars:
+        - HTTPS_PROXY: '{{ .inputs.PROXY_URL }}'
+        - HTTP_PROXY: '{{ .inputs.PROXY_URL }}'
+        - https_proxy: '{{ .inputs.PROXY_URL }}'
+        - http_proxy: '{{ .inputs.PROXY_URL }}'
+      files:
+        - source: qualy_samples
+          path: scripts/wait_for_finish_task.py
+      activities:
+        deploy:
+          commands:
+            - name: step1
+              command: |
+                set -e
+                WORKDIR=$PWD
+                git clone https://github.com/mabuelgh/intersight-ai-bridge 
+                test -d intersight-ai-bridge/intersight || { echo "ERROR: git_clone failed, aborting"; exit 1; }
+                cd intersight-ai-bridge/intersight
+                git clone https://github.com/vesposito/easyucs.git 
+                pip install -r easyucs/requirements.txt
+                pip install -r requirements.txt
+                printf "%s" "{{ .inputs.INTERSIGHT_PRIVATE_KEY }}" > SecretKey0.txt
+                sed 's/-----BEGIN EC PRIVATE KEY----- /-----BEGIN EC PRIVATE KEY-----\n/; s/ -----END EC PRIVATE KEY-----/\n-----END EC PRIVATE KEY-----/' SecretKey0.txt > SecretKey.txt
+                cat > .env << 'EOF'
+                SERVER_SERIAL={{ .inputs.SERVER_SERIAL }}
+                SERVER_PROFILE_NAME={{ .inputs.SERVER_PROFILE_NAME }}
+                NATIVE_VLAN_ID={{ .inputs.NATIVE_VLAN_ID }}
+                ALLOWED_VLANS={{ .inputs.ALLOWED_VLANS }}
+                INBAND_VLAN_ID={{ .inputs.INBAND_VLAN_ID }}
+                MGMT_IP_FROM={{ .inputs.MGMT_IP_FROM }}
+                MGMT_IP_TO={{ .inputs.MGMT_IP_TO }}
+                MGMT_GATEWAY={{ .inputs.MGMT_GATEWAY }}
+                MGMT_PRIMARY_DNS={{ .inputs.MGMT_PRIMARY_DNS }}
+                MGMT_SECONDARY_DNS={{ .inputs.MGMT_SECONDARY_DNS }}
+                POLICIES_PREFIX={{ .inputs.POLICIES_PREFIX }}
+                INTERSIGHT_HOST={{ .inputs.INTERSIGHT_HOST }}
+                INTERSIGHT_API_KEY_ID={{ .inputs.INTERSIGHT_API_KEY_ID }}
+                INTERSIGHT_PRIVATE_KEY_PATH=./SecretKey.txt
+                ORGANIZATION_NAME={{ .inputs.ORGANIZATION_NAME }}
+                SERVER_NAME={{ .inputs.SERVER_NAME }}
+                OS_IMAGE_NAME={{ .inputs.OS_IMAGE_NAME }}
+                SCU_IMAGE_NAME={{ .inputs.SCU_IMAGE_NAME }}
+                PROXY_URL={{ .inputs.PROXY_URL }}
+                SERVER_IP_ADDRESS={{ .inputs.SERVER_IP_ADDRESS }}
+                SERVER_GATEWAY={{ .inputs.SERVER_GATEWAY }}
+                SERVER_INTERFACE={{ .inputs.SERVER_INTERFACE }}
+                SERVER_HOSTNAME={{ .inputs.SERVER_HOSTNAME }}
+                SERVER_TIMEZONE={{ .inputs.SERVER_TIMEZONE }}
+                PRIMARY_DNS={{ .inputs.PRIMARY_DNS }}
+                SECONDARY_DNS={{ .inputs.SECONDARY_DNS }}
+                EOF
+                python generate_config.py --json
+
+                PROXY_URL="{{ .inputs.PROXY_URL }}"
+                PLACEHOLDER="http://your-proxy.company.com:80"
+
+                if [ -n "$PROXY_URL" ] && [ "$PROXY_URL" != "$PLACEHOLDER" ] && ! grep -q 'proxy=' easyucs/easyucs.py; then
+                    sed -i "s|log_file_path=log_file_path)|log_file_path=log_file_path, proxy=\"$PROXY_URL\")|g" easyucs/easyucs.py
+                    sed -i "/apiClient = intersight.ApiClient(conf)/i conf.proxy = \"$PROXY_URL\"" deploy_server_profile.py
+                    echo "Proxy added: $PROXY_URL"
+                elif [ "$PROXY_URL" == "$PLACEHOLDER" ]; then
+                    echo "PROXY_URL is still the placeholder value — skipping proxy injection."
+                elif [ -z "$PROXY_URL" ]; then
+                    echo "PROXY_URL is empty — skipping proxy injection."
+                else
+                    echo "proxy= already present in easyucs/easyucs.py — skipping to avoid duplication."
+                fi
+
+                EASYUCS_HOST="{{ .inputs.INTERSIGHT_HOST }}"
+                python easyucs/easyucs.py config push -i "${EASYUCS_HOST#https://}" -a {{ .inputs.INTERSIGHT_API_KEY_ID }} -k ./SecretKey.txt -t intersight -f ./config.json
+                echo "Deploy_server_profile script output will be logged to deploy_logs.txt"
+                python deploy_server_profile.py >> deploy_logs.txt 2>&1
+
+                echo "Wait_for_finish_task script"
+                sleep 3
+                set +e
+                python -u $WORKDIR/wait_for_finish_task.py --deploysp
+                EXIT_CODE=$?
+                set -e
+                if [ $EXIT_CODE -eq 1 ]; then
+                    echo "Deploy Server Profile failed."
+                elif [ $EXIT_CODE -eq 2 ]; then
+                    echo "Deploy Server Profile is taking too long."
+                elif [ $EXIT_CODE -eq 0 ]; then
+                    echo "Deploy Server Profile completed successfully."
+                else
+                    echo "Unexpected exit code from wait_for_finish_task.py: $EXIT_CODE"
+                fi
+
+  step2:
+    depends-on: step1
+    kind: shell
+    spec:
+      agent:
+        name: '{{ .inputs.agent }}'
+      files:
+        - source: qualy_samples
+          path: scripts/wait_for_finish_task.py
+      env-vars:
+        - HTTPS_PROXY: '{{ .inputs.PROXY_URL }}'
+        - HTTP_PROXY: '{{ .inputs.PROXY_URL }}'
+        - https_proxy: '{{ .inputs.PROXY_URL }}'
+        - http_proxy: '{{ .inputs.PROXY_URL }}'
+      activities:
+        deploy:
+          commands:
+            - name: step2
+              command: |
+                set -e
+                WORKDIR=$PWD
+                git clone https://github.com/mabuelgh/intersight-ai-bridge 
+                test -d intersight-ai-bridge/intersight || { echo "ERROR: git_clone failed, aborting"; exit 1; }
+                cd intersight-ai-bridge/intersight
+                pip install -r requirements.txt
+                cp .env.example .env
+                printf "%s" "{{ .inputs.INTERSIGHT_PRIVATE_KEY }}" > SecretKey0.txt
+                sed 's/-----BEGIN EC PRIVATE KEY----- /-----BEGIN EC PRIVATE KEY-----\n/; s/ -----END EC PRIVATE KEY-----/\n-----END EC PRIVATE KEY-----/' SecretKey0.txt > SecretKey.txt
+                cat > .env << 'EOF'
+                SERVER_SERIAL={{ .inputs.SERVER_SERIAL }}
+                SERVER_PROFILE_NAME={{ .inputs.SERVER_PROFILE_NAME }}
+                NATIVE_VLAN_ID={{ .inputs.NATIVE_VLAN_ID }}
+                ALLOWED_VLANS={{ .inputs.ALLOWED_VLANS }}
+                INBAND_VLAN_ID={{ .inputs.INBAND_VLAN_ID }}
+                MGMT_IP_FROM={{ .inputs.MGMT_IP_FROM }}
+                MGMT_IP_TO={{ .inputs.MGMT_IP_TO }}
+                MGMT_GATEWAY={{ .inputs.MGMT_GATEWAY }}
+                MGMT_PRIMARY_DNS={{ .inputs.MGMT_PRIMARY_DNS }}
+                MGMT_SECONDARY_DNS={{ .inputs.MGMT_SECONDARY_DNS }}
+                POLICIES_PREFIX={{ .inputs.POLICIES_PREFIX }}
+                INTERSIGHT_HOST={{ .inputs.INTERSIGHT_HOST }}
+                INTERSIGHT_API_KEY_ID={{ .inputs.INTERSIGHT_API_KEY_ID }}
+                INTERSIGHT_PRIVATE_KEY_PATH=./SecretKey.txt
+                ORGANIZATION_NAME={{ .inputs.ORGANIZATION_NAME }}
+                SERVER_NAME={{ .inputs.SERVER_NAME }}
+                OS_IMAGE_NAME={{ .inputs.OS_IMAGE_NAME }}
+                SCU_IMAGE_NAME={{ .inputs.SCU_IMAGE_NAME }}
+                PROXY_URL={{ .inputs.PROXY_URL }}
+                SERVER_IP_ADDRESS={{ .inputs.SERVER_IP_ADDRESS }}
+                SERVER_GATEWAY={{ .inputs.SERVER_GATEWAY }}
+                SERVER_INTERFACE={{ .inputs.SERVER_INTERFACE }}
+                SERVER_HOSTNAME={{ .inputs.SERVER_HOSTNAME }}
+                SERVER_TIMEZONE={{ .inputs.SERVER_TIMEZONE }}
+                PRIMARY_DNS={{ .inputs.PRIMARY_DNS }}
+                SECONDARY_DNS={{ .inputs.SECONDARY_DNS }}
+                EOF
+
+                PROXY_URL="{{ .inputs.PROXY_URL }}"
+                PLACEHOLDER="http://your-proxy.company.com:80"
+
+                if [ -n "$PROXY_URL" ] && [ "$PROXY_URL" != "$PLACEHOLDER" ] && ! grep -q 'proxy=' os_install.py; then
+                    sed -i "/apiClient = intersight.ApiClient(conf)/i conf.proxy = \"$PROXY_URL\"" os_install.py
+                    echo "Proxy added: $PROXY_URL"
+                elif [ "$PROXY_URL" == "$PLACEHOLDER" ]; then
+                    echo "PROXY_URL is still the placeholder value — skipping proxy injection."
+                elif [ -z "$PROXY_URL" ]; then
+                    echo "PROXY_URL is empty — skipping proxy injection."
+                else
+                    echo "proxy= already present in os_install.py — skipping to avoid duplication."
+                fi
+
+
+                python generate_config.py --ubuntu
+                echo "Configuration generated successfully."
+                python os_install.py
+                sleep 10
+                set +e
+                python -u $WORKDIR/wait_for_finish_task.py --deployos
+                EXIT_CODE=$?
+                set -e
+                if [ $EXIT_CODE -eq 1 ]; then
+                    echo "OS Install failed."
+                elif [ $EXIT_CODE -eq 2 ]; then
+                    echo "OS Install is taking too long or not found."
+                elif [ $EXIT_CODE -eq 0 ]; then
+                    echo "OS Install completed successfully."
+                else
+                    echo "Unexpected exit code from wait_for_finish_task.py for OS install: $EXIT_CODE"
+                fi
+                echo "Step 2 ended."
+
+  step3:
+    depends-on: step2
+    kind: shell
+    spec:
+      agent:
+        name: '{{ .inputs.agent }}'
+      activities:
+        deploy:
+          commands:
+            - name: step3
+              command: |
+                set -e
+                WORKDIR=$PWD
+                
+                PROXY_URL={{ .inputs.PROXY_URL }}
+                export http_proxy="$PROXY_URL" https_proxy="$PROXY_URL" HTTP_PROXY="$PROXY_URL" HTTPS_PROXY="$PROXY_URL"
+
+
+                # Start of the step 3
+                apt-get update -y
+                apt-get install -y sshpass netcat-openbsd
+                SERVER_IP=$(echo "{{ .inputs.SERVER_IP_ADDRESS }}" | cut -d'/' -f1)
+                # Check TCP/22 instead of ICMP: ping is often filtered on the agent's network path even when SSH is reachable
+                ATTEMPTS=60
+                for i in $(seq 1 $ATTEMPTS); do
+                  if nc -z -w 3 $SERVER_IP 22 &> /dev/null; then
+                    echo "Server $SERVER_IP is reachable on port 22. Proceeding with SSH."
+                    break
+                  else
+                    echo "Attempt $i: Server $SERVER_IP is not reachable on port 22. Retrying in 30 seconds..."
+                    sleep 30
+                  fi
+                  if [ $i -eq $ATTEMPTS ]; then
+                    echo "Server $SERVER_IP is not reachable on port 22 after $ATTEMPTS attempts. Exiting."
+                    exit 1
+                  fi
+                done
+                # Need to remove the hardcoded password and use a reading of the password from an input
+                sshpass -p "UbuntuPWD" ssh -o StrictHostKeyChecking=no ubuntu@${SERVER_IP} << 'EOF'
+                  PROXY_URL={{ .inputs.PROXY_URL }}
+                  SUDO_PASS='UbuntuPWD'
+                  export http_proxy="$PROXY_URL" https_proxy="$PROXY_URL" HTTP_PROXY="$PROXY_URL" HTTPS_PROXY="$PROXY_URL"
+
+                  # One-time passwordless sudo setup
+                  printf '%s\n' "$SUDO_PASS" | sudo -S sed -i 's/^Defaults\s\+requiretty/# Defaults requiretty/' /etc/sudoers
+                  printf '%s\n' "$SUDO_PASS" | sudo -S bash -c 'echo "ubuntu ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu-nopasswd'
+                  printf '%s\n' "$SUDO_PASS" | sudo -S chmod 0440 /etc/sudoers.d/ubuntu-nopasswd
+
+                  git clone https://github.com/mabuelgh/intersight-ai-bridge
+                  test -d intersight-ai-bridge || { echo "ERROR: git_clone failed, aborting"; exit 1; }
+                  cd intersight-ai-bridge
+                  chmod +x *.sh
+                  sed -i "s|PROXY_URL=\".*\"|PROXY_URL=\"$PROXY_URL\"|" setup.sh
+                  ./setup.sh
+                  echo "Reboot command issued. Checking uptime before disconnect:"
+                  uptime
+                EOF
+
+                echo "Step 3 ended. The server should be rebooting now."
+
+  step4:
+    depends-on: step3
+    kind: shell
+    spec:
+      agent:
+        name: '{{ .inputs.agent }}'
+      activities:
+        deploy:
+          commands:
+            - name: step4
+              command: |
+                set -e
+                WORKDIR=$PWD
+
+                PROXY_URL={{ .inputs.PROXY_URL }}
+                export http_proxy="$PROXY_URL" https_proxy="$PROXY_URL" HTTP_PROXY="$PROXY_URL" HTTPS_PROXY="$PROXY_URL"
+
+                # Start of the step 4
+                apt-get update -y
+                apt-get install -y sshpass netcat-openbsd
+                SERVER_IP=$(echo "{{ .inputs.SERVER_IP_ADDRESS }}" | cut -d'/' -f1)
+                # Check TCP/22 instead of ICMP: ping is often filtered on the agent's network path even when SSH is reachable
+                ATTEMPTS=10
+                for i in $(seq 1 $ATTEMPTS); do
+                  if nc -z -w 3 $SERVER_IP 22 &> /dev/null; then
+                    echo "Server $SERVER_IP is reachable on port 22. Proceeding with SSH."
+                    break
+                  else
+                    echo "Attempt $i: Server $SERVER_IP is not reachable on port 22. Retrying in 30 seconds..."
+                    sleep 30
+                  fi
+                  if [ $i -eq $ATTEMPTS ]; then
+                    echo "Server $SERVER_IP is not reachable on port 22 after $ATTEMPTS attempts. Exiting."
+                    exit 1
+                  fi
+                done
+                # Need to remove the hardcoded password and use a reading of the password from an input
+                sshpass -p "UbuntuPWD" ssh -o StrictHostKeyChecking=no ubuntu@${SERVER_IP} << 'EOF'
+                  cd intersight-ai-bridge
+                  ./scenario{{ .inputs.USE_CASE_SCENARIO }}.sh
+                EOF
+
+                echo "Step 4 ended. You can access your server and try out the LLM installed."

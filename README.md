@@ -23,6 +23,10 @@ This project provides scripts and configurations to:
 > There is no preferred way to use AI Pods, however Cisco Validated Designs suggest to use OpenShift.
 > Ubuntu method can be used for easy and quick proof of concept deployment where OpenShift is recommended for production deployment.
 
+> [!NOTE]
+> This project is now compatible with **Cisco Stack Automation**. Follow the *[link](blueprints/Stack_Automation.md)* for guidelines.
+
+
 ## Getting Started
 
 ### Step 1: Deploy the Server Profile on Intersight
