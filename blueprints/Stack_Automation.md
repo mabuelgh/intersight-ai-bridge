@@ -29,7 +29,7 @@ Each blueprint automates one step of the end-to-end AI infrastructure deployment
 - A Torque **agent** deployed in the target environment with network access to the server and Intersight
 - An **Intersight API key** (Key ID + EC Private Key) — see [Step 1 documentation](../intersight/tutorials/Step_1.md)
 - The asset **`qualy_samples`** configured as a Torque repository asset, pointing to this repository (used to provide helper scripts to the agent)
-- Intersight **Advantage license** for OS Install features (Steps 1 & 2); can be skipped for manual installs
+- Intersight **Advantage license** for OS Install features (only for Step 2); can be skipped for manual installs
 
 ---
 
@@ -48,7 +48,7 @@ Each blueprint automates one step of the end-to-end AI infrastructure deployment
 - Launch the deployment
 
 > [!TIP]
-> You might need to switch the active Space from "All Spaces" to a specific one.
+> You might need to switch the active Space from "All Spaces" to the "Sandbox" one.
 
 ---
 
@@ -59,29 +59,29 @@ All blueprints share a common set of inputs. Defaults are provided as examples a
 | Input | Description | Example |
 |-------|-------------|---------|
 | `agent` | Torque agent to execute the blueprint on | *(agent selector)* |
-| `PROXY_URL` | HTTP/HTTPS proxy URL (leave blank if not needed) | `http://proxy.example.com:80` |
-| `INTERSIGHT_API_KEY_ID` | Intersight API Key ID | `671235.../...` |
-| `INTERSIGHT_PRIVATE_KEY` | EC Private Key for Intersight API (single-line, spaces between header and body) | `-----BEGIN EC PRIVATE KEY----- ... -----END EC PRIVATE KEY-----` |
-| `INTERSIGHT_HOST` | Intersight endpoint URL | `https://eu-central-1.intersight.com` |
-| `SERVER_SERIAL` | Serial number of the target UCS server | `FCH290475TC` |
-| `SERVER_NAME` | Logical name of the server in Intersight | `CSS-DCC7-1-6` |
+| `PROXY_URL` | HTTP/HTTPS proxy URL (leave blank if not needed) | `http://your-proxy.company.com:80` |
+| `INTERSIGHT_API_KEY_ID` | Intersight API Key ID | `your_api_key_id_here` |
+| `INTERSIGHT_PRIVATE_KEY` | EC Private Key for Intersight API (single-line, spaces between header and body) | `-----BEGIN EC PRIVATE KEY----- your_private_key_here -----END EC PRIVATE KEY-----` |
+| `INTERSIGHT_HOST` | Intersight endpoint URL | `https://intersight.com` |
+| `SERVER_SERIAL` | Serial number of the target UCS server | `AAA111222BB` |
+| `SERVER_NAME` | Logical name of the server in Intersight | `AIPOD-1-1` |
 | `SERVER_PROFILE_NAME` | Name of the server profile to create/assign | `IAIB-AI-IMM-1` |
-| `NATIVE_VLAN_ID` | Native VLAN ID for the server NIC policy | `541` |
-| `ALLOWED_VLANS` | Allowed VLANs on the trunk | `541` |
-| `INBAND_VLAN_ID` | In-band management VLAN ID | `541` |
-| `MGMT_IP_FROM` / `MGMT_IP_TO` | IP pool range for in-band management | `10.48.54.95` |
-| `MGMT_GATEWAY` | Gateway for management network | `10.48.54.1` |
-| `MGMT_PRIMARY_DNS` / `MGMT_SECONDARY_DNS` | DNS servers for management network | `10.60.1.1` / `10.60.1.2` |
-| `POLICIES_PREFIX` | Prefix used when naming Intersight policies | `Q-IAIB` |
+| `NATIVE_VLAN_ID` | Native VLAN ID for the server NIC policy | `100` |
+| `ALLOWED_VLANS` | Allowed VLANs on the trunk | `100` |
+| `INBAND_VLAN_ID` | In-band management VLAN ID | `100` |
+| `MGMT_IP_FROM` / `MGMT_IP_TO` | IP pool range for in-band management | `192.168.1.100` |
+| `MGMT_GATEWAY` | Gateway for management network | `192.168.1.1` |
+| `MGMT_PRIMARY_DNS` / `MGMT_SECONDARY_DNS` | DNS servers for management network | `8.8.8.8` / `8.8.4.4` |
+| `POLICIES_PREFIX` | Prefix used when naming Intersight policies | `IAIB` |
 | `ORGANIZATION_NAME` | Intersight organization name | `default` |
 | `OS_IMAGE_NAME` | OS ISO image name as registered in Intersight | `ubuntu-24.04.3-live-server-amd64.iso` |
-| `SCU_IMAGE_NAME` | SCU image name as registered in Intersight | `SCU-7.1.5.250100` |
-| `SERVER_IP_ADDRESS` | Target OS IP address with prefix length | `10.48.54.85/25` |
-| `SERVER_GATEWAY` | OS-level default gateway | `10.48.54.1` |
+| `SCU_IMAGE_NAME` | SCU image name as registered in Intersight | `SCU.7.1.4.iso` |
+| `SERVER_IP_ADDRESS` | Target OS IP address with prefix length | `192.168.1.100/24` |
+| `SERVER_GATEWAY` | OS-level default gateway | `192.168.1.1` |
 | `SERVER_INTERFACE` | NIC interface name on the OS | `eno5` |
-| `SERVER_HOSTNAME` | Hostname to assign to the server | `ai-server-q` |
+| `SERVER_HOSTNAME` | Hostname to assign to the server | `ai-server` |
 | `SERVER_TIMEZONE` | Timezone for the OS | `UTC` |
-| `PRIMARY_DNS` / `SECONDARY_DNS` | DNS servers for the OS | `10.60.1.1` / `8.8.8.8` |
+| `PRIMARY_DNS` / `SECONDARY_DNS` | DNS servers for the OS | `8.8.8.8` / `8.8.4.4` |
 
 > [!CAUTION]
 > The `INTERSIGHT_PRIVATE_KEY` input is sensitive. It will be visible in the deployment logs. It is highly recommended to deactivate this API key once the deployment is over, or to delete the deployment from Stack Automation.
@@ -90,7 +90,7 @@ All blueprints share a common set of inputs. Defaults are provided as examples a
 
 ## Blueprint Details
 
-### `step1.yaml` — Deploy Server Profile + OS Install
+### `step1.yaml` — Deploy Server Profile
 
 Generates the Intersight configuration from template variables, pushes it via EasyUCS, and deploys the server profile using `deploy_server_profile.py`. It then waits for the task to complete.
 

@@ -5,7 +5,7 @@
 
 # Variables
 LLM_MODEL="mistralai/Ministral-3-14B-Instruct-2512"
-LLM_EMBEDDING_MODEL="BAAI/bge-base-en-v1.5" # Alternative embedding model, to test
+LLM_EMBEDDING_MODEL="intfloat/e5-mistral-7b-instruct" 
 LLM_MODEL_FOLDER="${LLM_MODEL#*/}"
 LLM_EMBEDDING_MODEL_FOLDER="${LLM_EMBEDDING_MODEL#*/}"
 INTERFACE="eno5" # For UCS-X compute node
@@ -47,7 +47,7 @@ if sudo docker compose -f docker-compose-vllm-RAG.yml up -d; then
     # We need to make this curl operation to initiate the creation of a "no auth" user first, then we can execute the rag.sh script to create the knowledge base and upload files, which requires the token from a real user.
     curl -H "Content-Type: application/json" -d '{"email":"","password":""}' http://127.0.0.1:3001/api/v1/auths/signin > /dev/null 2>&1    
     ./initiate_rag.sh
-    print_subsection_header "Access the web interface at http://$IP_ADDRESS:3001"
+    print_subsection_header "Access the web interface with knowledge base model at http://$IP_ADDRESS:3001/?model=model-with-kb"
 else
     echo "Failed to build Docker image or to run Docker container."
     exit 1

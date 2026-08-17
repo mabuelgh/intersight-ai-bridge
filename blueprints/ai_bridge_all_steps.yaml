@@ -92,16 +92,13 @@ grains:
     spec:
       agent:
         name: '{{ .inputs.agent }}'
-      # files:
-      #  - source: qualy_samples
-      #    path: scripts/setup.sh
       env-vars:
         - HTTPS_PROXY: '{{ .inputs.PROXY_URL }}'
         - HTTP_PROXY: '{{ .inputs.PROXY_URL }}'
         - https_proxy: '{{ .inputs.PROXY_URL }}'
         - http_proxy: '{{ .inputs.PROXY_URL }}'
       files:
-        - source: qualy_samples
+        - source: intersight-ai-bridge
           path: scripts/wait_for_finish_task.py
       activities:
         deploy:
@@ -191,7 +188,7 @@ grains:
       agent:
         name: '{{ .inputs.agent }}'
       files:
-        - source: qualy_samples
+        - source: intersight-ai-bridge
           path: scripts/wait_for_finish_task.py
       env-vars:
         - HTTPS_PROXY: '{{ .inputs.PROXY_URL }}'

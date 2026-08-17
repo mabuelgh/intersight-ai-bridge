@@ -3,7 +3,7 @@ services:
   vllm-gpu:
     image: vllm/vllm-openai:v0.14.1
     container_name: vllm-mistral
-    command: --model /app/model/ --port 8001 --max-model-len 32768 --dtype bfloat16
+    command: --model /app/model/ --port 8001 --max-model-len 32768 --dtype bfloat16 --enable-auto-tool-choice --tool-call-parser mistral
     volumes:
       - ./models/Ministral-3-14B-Instruct-2512:/app/model
     ports:
@@ -45,9 +45,9 @@ services:
   vllm-embedding:
     image: vllm/vllm-openai:v0.14.1
     container_name: vllm-embedding
-    command: --model /app/model/rag 
+    command: --model /app/model/rag
     volumes:
-      - ./models/bge-base-en-v1.5:/app/model/rag
+      - ./models/e5-mistral-7b-instruct:/app/model/rag
     ports:
       - "8010:8000"
     restart: always

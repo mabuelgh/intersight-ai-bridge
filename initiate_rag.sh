@@ -122,25 +122,41 @@ echo "✅ Model created → ID: $CREATED_MODEL_ID"
 # ─────────────────────────────────────────
 echo "🔗 Attaching Knowledge Base to Model..."
 
-UPDATE_RESPONSE=$(curl -s -X POST "$BASE_URL/api/v1/models/model/update?id=$MODEL_ID" \
+UPDATE_RESPONSE=$(curl -s -X POST "$BASE_URL/api/v1/models/model/update" \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d "{
     \"id\": \"$MODEL_ID\",
-    \"name\": \"$MODEL_NAME\",
     \"base_model_id\": \"$BASE_MODEL\",
+    \"name\": \"$MODEL_NAME\",
     \"meta\": {
+      \"profile_image_url\": null,
       \"description\": \"$MODEL_DESC\",
+      \"capabilities\": {
+        \"file_context\": true,
+        \"vision\": true,
+        \"file_upload\": true,
+        \"web_search\": true,
+        \"image_generation\": true,
+        \"code_interpreter\": true,
+        \"terminal\": true,
+        \"citations\": true,
+        \"status_updates\": true,
+        \"memory\": true,
+        \"builtin_tools\": true
+      },
       \"knowledge\": [
         {
           \"id\": \"$KNOWLEDGE_ID\",
           \"name\": \"$KNOWLEDGE_NAME\",
-          \"description\": \"$KNOWLEDGE_DESC\",
-          \"type\": \"collection\"
+          \"type\": \"collection\",
+          \"description\": \"$KNOWLEDGE_DESC\"
         }
       ]
     },
-    \"params\": {}
+    \"params\": {},
+    \"access_grants\": [],
+    \"is_active\": true
   }")
 
 UPDATED_ID=$(echo "$UPDATE_RESPONSE" | grep -o '"id":"[^"]*' | cut -d'"' -f4)

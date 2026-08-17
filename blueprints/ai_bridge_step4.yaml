@@ -94,7 +94,7 @@ grains:
       agent:
         name: '{{ .inputs.agent }}'
       files:
-        - source: qualy_samples
+        - source: intersight-ai-bridge
           path: scripts/wait_for_finish_task.py
       activities:
         deploy:

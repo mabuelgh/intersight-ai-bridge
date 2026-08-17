@@ -98,7 +98,7 @@ grains:
         - https_proxy: '{{ .inputs.PROXY_URL }}'
         - http_proxy: '{{ .inputs.PROXY_URL }}'
       files:
-        - source: qualy_samples
+        - source: intersight-ai-bridge
           path: scripts/wait_for_finish_task.py
       activities:
         deploy:

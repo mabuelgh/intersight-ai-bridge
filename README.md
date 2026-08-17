@@ -123,6 +123,25 @@ Launch vLLMs with curl containers:
 > [!IMPORTANT]
 > This scenario was made for dual GPU infra, remove the "gpu2" containers in *docker-compose-vllm-stresstest.yml* if necessary.
 
+#### Customize the LLM used (Optionnal)
+All the models used in that project are predefined but you can easily customize them : 
+- Make sure to modify the **path to the model in the yml files** associated with the scenario, usually under the **"volumes"** part
+- Modify the script (.sh) associated with the scenario, usually **"LLM_MODEL"** under the **"Variables"** part
+
+<details>
+<summary>Find the right LLM for your setup</summary>
+As a way to look for the <strong>right model to fit your setup and your usage</strong>, you could use project like <a href="https://github.com/AlexsJones/llmfit">llmfit</a>.<br>Here is how you can use it with Docker and nvidia-smi installed:
+
+   ```bash
+   sudo docker run -d -p 8787:8787 --gpus all --name llmfit_service ghcr.io/alexsjones/llmfit serve --host "0.0.0.0" 
+   # Using interactive view of llmfit
+   sudo docker exec -it llmfit_service llmfit
+   # Using llmfit API
+   curl -s "http://localhost:8787/api/v1/models?runtime=vLLM&limit=10" | jq
+   curl -s "http://localhost:8787/api/v1/models?runtime=vLLM&limit=10&min_fit=perfect&usecase=chat" | jq # Looking for the best 10 chat models for your environnement
+   curl -s "http://localhost:8787/api/v1/models?runtime=vLLM&limit=10&min_fit=perfect&usecase=embedding" | jq # Looking for the best 10 embedding models for your environnement
+   ```
+</details>
 
 ## Monitoring
 - You can monitor GPUs with commands: "**nvidia-smi**" & "**nvtop**"
