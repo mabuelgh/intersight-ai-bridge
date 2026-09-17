@@ -45,20 +45,31 @@ NO_PROXY=localhost,127.0.0.1,171.*,172.*,192.*,10.*,1.*" | sudo tee -a /etc/envi
 
 # Part 2: Update and Upgrade the package list
 print_section_header "Updating the package list"
-# Remove the interactive dialog during package upgrades, only valable during this script execution
+# Remove all interactive dialogs during package upgrades (debconf + needrestart),
+# for the whole duration of this script execution.
 export DEBIAN_FRONTEND=noninteractive
-sudo needrestart -r a
-sudo apt-get update
-sudo apt upgrade -y
+export NEEDRESTART_MODE=a
+export NEEDRESTART_SUSPEND=1
+
+# needrestart pops up its own whiptail UI (independent from debconf/DEBIAN_FRONTEND)
+# to ask which services to restart. Force it to restart everything automatically
+# and never prompt, both via env var and its config file (belt and suspenders).
+sudo mkdir -p /etc/needrestart/conf.d
+sudo tee /etc/needrestart/conf.d/50-autorestart.conf > /dev/null <<'EOF'
+$nrconf{restart} = 'a';
+EOF
+
+sudo -E apt-get update -y
+sudo -E apt-get upgrade -y
 
 # Part 3: Docker Installation
 print_section_header "Installing Docker"
 
 print_subsection_header "Removing old Docker versions if any"
-for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo -E apt-get remove -y $pkg; done
 
 print_subsection_header "Adding Docker's official GPG key"
-sudo apt-get install ca-certificates curl
+sudo -E apt-get install -y ca-certificates curl
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -68,10 +79,10 @@ echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
   $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
+sudo -E apt-get update -y
 
 print_subsection_header "Installing Docker packages"
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo -E apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 print_subsection_header "Appending proxy settings to Docker service configuration"
 sudo mkdir -p /etc/systemd/system/docker.service.d
@@ -97,13 +108,13 @@ sudo systemctl restart docker
 # Part 4: Install Nvidia Drivers
 print_section_header "Installing Nvidia Drivers"
 sudo ubuntu-drivers autoinstall
-sudo apt-get dist-upgrade
+sudo -E apt-get dist-upgrade -y
 
 # Part 5: Install Nvidia container toolkit
 print_section_header "Installing Nvidia container toolkit"
 
 print_subsection_header "Installing prerequisites"
-sudo apt-get update && sudo apt-get install -y --no-install-recommends curl gnupg2
+sudo -E apt-get update -y && sudo -E apt-get install -y --no-install-recommends curl gnupg2
 
 print_subsection_header "Adding Nvidia's official GPG key"
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
@@ -113,10 +124,10 @@ curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-contai
 # sudo sed -i -e '/experimental/ s/^#//g' /etc/apt/sources.list.d/nvidia-container-toolkit.list
 
 print_subsection_header "Updating the package list"
-sudo apt-get update
+sudo -E apt-get update -y
 
 print_subsection_header "Installing Nvidia container toolkit"
-sudo apt-get install -y nvidia-container-toolkit
+sudo -E apt-get install -y nvidia-container-toolkit
 
 print_subsection_header "Configuring Docker container runtime to use Nvidia GPU"
 sudo nvidia-ctk runtime configure --runtime=docker
@@ -137,13 +148,13 @@ sudo nvidia-ctk config --set nvidia-container-cli.no-cgroups --in-place
 print_section_header "Installing AI tools"
 
 print_subsection_header "Installing Python3 and pip"
-sudo apt-get install -y python3 python3-pip
+sudo -E apt-get install -y python3 python3-pip
 
 print_subsection_header "Installing htop tool to monitor CPU usage"
-sudo apt-get install htop
+sudo -E apt-get install -y htop
 
 print_subsection_header "Installing nvtop tool to monitor GPU usage"
-sudo apt-get install nvtop
+sudo -E apt-get install -y nvtop
 
 print_subsection_header "Installing huggingface hub"
 # Uncomment the following lines to install huggingface_hub in a virtual environment
@@ -152,7 +163,7 @@ print_subsection_header "Installing huggingface hub"
 # source ai-bridge/bin/activate
 # pip install huggingface_hub
 # To install huggingface_hub system-wide, use the following command:
-sudo pip install --break-system-packages huggingface_hub
+sudo pip install huggingface_hub
 
 # Part 7: Reboot host machine
 print_section_header "All done! Rebooting now..."

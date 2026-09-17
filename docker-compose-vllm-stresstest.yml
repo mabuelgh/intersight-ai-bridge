@@ -5,7 +5,7 @@ services:
   vllm-gpu1:
     image: vllm/vllm-openai:latest
     container_name: vllm-gpu1
-    command: --model /app/model/phi4 --port 8000
+    command: --model /app/model/phi4 --port 8000 --enable-auto-tool-choice  --tool-call-parser hermes
     volumes:
       - ./models/Phi-4-mini-instruct:/app/model/phi4
     ports:
@@ -27,7 +27,7 @@ services:
   vllm-gpu2:
     image: vllm/vllm-openai:latest
     container_name: vllm-gpu2
-    command: --model /app/model/phi4 --port 8001
+    command: --model /app/model/phi4 --port 8001 --enable-auto-tool-choice  --tool-call-parser hermes
     volumes:
       - ./models/Phi-4-mini-instruct:/app/model/phi4
     ports:

@@ -44,6 +44,7 @@ autoinstall:
     disable_root: false
     timezone: ${SERVER_TIMEZONE}
   late-commands:
+    - echo "Applied late commands" >> /tmp/log1
     - OS_INSTALL_COMPLETED_STATUS_PLACEHOLDER
     # Reorder boot entries: Remove SCU entry ## Need to check if the boot order policy can be simplified
     - curtin in-target --target=/target -- efibootmgr -b 0000 -B

@@ -5,7 +5,7 @@ services:
   vllm:
     image: vllm/vllm-openai:latest
     container_name: vllm
-    command: --model /app/model/
+    command: --model /app/model/ --enable-auto-tool-choice  --tool-call-parser hermes
     volumes:
       - ./models/Phi-4-mini-instruct:/app/model
     ports:
