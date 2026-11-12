@@ -144,6 +144,12 @@ As a way to look for the <strong>right model to fit your setup and your usage</s
 </details>
 
 ## Monitoring
+- You can initiate **HCL status** refresh and update in Intersight using the Intersight OS Discovery Tool and through this script:
+
+   ```bash
+   sudo ./initiate_hcl.sh
+   ```
+
 - You can monitor GPUs with commands: "**nvidia-smi**" & "**nvtop**"
 - **Intersight has native visibility over the GPU activity**, without OS Agent. You can monitor GPU metrics directly from Intersight server inventory or through the Metrics Explorer
 
